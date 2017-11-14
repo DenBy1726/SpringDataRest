@@ -2,8 +2,9 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
 import Table from './components/Table'
+import client from './client'
 
-let request = new XMLHttpRequest();
+/*let request = new XMLHttpRequest();
 request.open('GET', '/api/v1/concretePages', true);
 request.send(null);
 request.onreadystatechange = function () {
@@ -18,4 +19,10 @@ request.onreadystatechange = function () {
                 document.getElementById("root"));
         }
     }
-};
+};*/
+
+client('GET','/api/v1/concretePages').then(data=>{
+    ReactDOM.render(
+        <Table data={data._embedded.concretePages}/>,
+        document.getElementById("root"));
+});
