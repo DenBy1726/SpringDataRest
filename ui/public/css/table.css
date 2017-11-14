@@ -1,5 +1,5 @@
 table {
-    border-spacing: 1;
+    border-spacing: 1px;
     border-collapse: collapse;
     background: white;
     border-radius: 6px;
@@ -12,6 +12,15 @@ table {
 table * {
     position: relative;
 }
+
+tr:hover{
+    background-color: #eeeeee;
+}
+
+table > thead > tr:first-child:hover{
+    background-color: #FFED66;
+}
+
 table td, table th {
     padding-left: 8px;
 }
@@ -24,6 +33,7 @@ table tbody tr {
     height: 48px;
     border-bottom: 1px solid #E3F1D5;
 }
+
 table tbody tr:last-child {
     border: 0;
 }
@@ -69,19 +79,10 @@ table td.r, table th.r {
         top: 0;
     }
     table tbody tr td:nth-child(1):before {
-        content: "Code";
+        content: "Title";
     }
     table tbody tr td:nth-child(2):before {
-        content: "Stock";
-    }
-    table tbody tr td:nth-child(3):before {
-        content: "Cap";
-    }
-    table tbody tr td:nth-child(4):before {
-        content: "Inch";
-    }
-    table tbody tr td:nth-child(5):before {
-        content: "Box Type";
+        content: "Category";
     }
 }
 body {

@@ -1,7 +1,7 @@
-const client = (type, url) => {
+const client = (method, path) => {
  return new Promise((resolve, reject) => {
     let request = new XMLHttpRequest();
-    request.open(type, url, true);
+    request.open(method, path, true);
     request.send(null);
     request.onreadystatechange = () => {
         if (request.readyState === 4 && request.status === 200) {

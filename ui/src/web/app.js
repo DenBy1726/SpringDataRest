@@ -21,8 +21,7 @@ request.onreadystatechange = function () {
     }
 };*/
 
-client('GET','/api/v1/concretePages').then(data=>{
     ReactDOM.render(
-        <Table data={data._embedded.concretePages}/>,
-        document.getElementById("root"));
-});
+        <Table/>,
+        document.getElementById("root")
+    );
