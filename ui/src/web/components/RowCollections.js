@@ -10,7 +10,7 @@ export default class RowCollections extends React.Component{
     render(){
         return  <tbody>
         {
-            this.props.data.map(x => <Row data={x}/>)
+            this.props.data.map(x => <Row key={x._links.self.href} data={x}/>)
         }
         </tbody>
 
