@@ -1,25 +1,19 @@
-const client = (method, path) => {
- return new Promise((resolve, reject) => {
-    let request = new XMLHttpRequest();
-    request.open(method, path, true);
-    request.send();
-    request.onreadystatechange = () => {
-        if (request.readyState === 4 && request.status === 200) {
-            let type = request.getResponseHeader('Content-Type');
-            if (type.indexOf("text") !== 1) {
-                let json = request.responseText;
-                const data = JSON.parse(json);
+'use strict';
 
-                resolve(data);
-            }
-        }
-    };
-})
-};
+var rest = require('rest');
+var defaultRequest = require('rest/interceptor/defaultRequest');
+var mime = require('rest/interceptor/mime');
+var uriTemplateInterceptor = require('./api/uriTemplateInterceptor');
+var errorCode = require('rest/interceptor/errorCode');
+var baseRegistry = require('rest/mime/registry');
 
-const loadPage = (method,path,pageSize) =>{
-    let req = path+ '?size=' + pageSize;
-    return client(method,req);
-};
+var registry = baseRegistry.child();
 
-export {client,loadPage};
+registry.register('text/uri-list', require('./api/uriListConverter'));
+registry.register('application/hal+json', require('rest/mime/type/application/hal'));
+
+module.exports = rest
+    .wrap(mime, { registry: registry })
+    .wrap(uriTemplateInterceptor)
+    .wrap(errorCode)
+    .wrap(defaultRequest, { headers: { 'Accept': 'application/hal+json' }});
