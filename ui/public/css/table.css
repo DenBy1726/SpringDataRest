@@ -1,3 +1,9 @@
+#root{
+    width: 800px;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+}
 table {
     border-spacing: 1px;
     border-collapse: collapse;
@@ -6,7 +12,7 @@ table {
     overflow: hidden;
     max-width: 800px;
     width: 100%;
-    margin: 0 auto;
+    margin: 10px auto;
     position: relative;
 }
 table * {
@@ -102,6 +108,8 @@ blockquote {
 }
 input.field {
     width: 90%;
+    border-radius: 15px;
+    outline:none;
 }
 
 .modalDialog {
@@ -157,3 +165,38 @@ input.field {
 }
 
 .close:hover { background: #00d9ff; }
+
+#addPageLink{
+    width:25px;
+    height:25px;
+    position: absolute;
+    background: #FFED86;
+    color: #9BC86A;
+    font-size: 23px;
+    left:775px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius:  9px;
+    text-align: center;
+}
+
+#addPageLink:hover{
+    background-color: #FFED66;
+}
+
+#addBar{
+    height:20px;
+}
+
+.submitDialogButton{
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.submitDialogButton:hover{
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+    outline: none;
+}
