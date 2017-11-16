@@ -4,6 +4,7 @@ import follow from '../follow'
 import client from '../client'
 import TableSchema from "./TableSchema";
 import CreateDialog from "./CreateDialog"
+import NavBar from "./NavBar"
 
 const root = "/api/v1/";
 
@@ -85,6 +86,7 @@ export default class Table extends React.Component{
                        <TableSchema data={this.state.attributes}/>
                        <RowCollections data={this.state.concretePages}/>
             </table>
+            <NavBar links={this.state.links} onNavigate={this.onNavigate}/>
         </div>
     }
 }
