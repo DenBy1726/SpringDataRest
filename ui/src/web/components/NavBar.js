@@ -9,49 +9,66 @@ export default class NavBar extends React.Component{
         this.handleNavPrev = this.handleNavPrev.bind(this);
         this.handleNavNext = this.handleNavNext.bind(this);
         this.handleNavLast = this.handleNavLast.bind(this);
+        this.handlePageSize = this.handlePageSize.bind(this);
     }
 
     handleNavFirst(e){
         e.preventDefault();
-        this.props.onNavigate(this.props.links.first.href);
+        this.props.onNavigate(this.props.links.first.href,this.props.attributes);
     }
 
     handleNavPrev(e) {
         e.preventDefault();
-        this.props.onNavigate(this.props.links.prev.href);
+        this.props.onNavigate(this.props.links.prev.href,this.props.attributes);
     }
 
     handleNavNext(e) {
         e.preventDefault();
-        this.props.onNavigate(this.props.links.next.href);
+        this.props.onNavigate(this.props.links.next.href,this.props.attributes);
     }
 
     handleNavLast(e) {
         e.preventDefault();
-        this.props.onNavigate(this.props.links.last.href);
+        this.props.onNavigate(this.props.links.last.href,this.props.attributes);
+    }
+
+    handlePageSize(){
+        let input = this.refs.pageSizeInput.value;
+        if(input !== "")
+            this.props.changePageSize(input);
     }
 
     render(){
         let navLinks = [];
         if ("first" in this.props.links) {
-            navLinks.push(<button key="first" onClick={this.handleNavFirst}>&lt;&lt;</button>);
+            navLinks.push(<a key="first" onClick={this.handleNavFirst}>&lt;&lt;</a>);
         }
         if ("prev" in this.props.links) {
-            navLinks.push(<button key="prev" onClick={this.handleNavPrev}>&lt;</button>);
+            navLinks.push(<a key="prev" onClick={this.handleNavPrev}>&lt;</a>);
         }
         if ("next" in this.props.links) {
-            navLinks.push(<button key="next" onClick={this.handleNavNext}>&gt;</button>);
+            navLinks.push(<a key="next" onClick={this.handleNavNext}>&gt;</a>);
         }
         if ("last" in this.props.links) {
-            navLinks.push(<button key="last" onClick={this.handleNavLast}>&gt;&gt;</button>);
+            navLinks.push(<a key="last" onClick={this.handleNavLast}>&gt;&gt;</a>);
         }
-        return <div>
-            {navLinks}
+        return <div className="paginationTab">
+            <div className="paginator">
+                {navLinks}
+            </div>
+            <div>
+                <a className="paginationInfo">Страница {this.props.page.number + 1} из {this.props.page.totalPages}</a>
+                <a className="paginationInfo">Размер страницы</a>
+                <input id="pageSizeInput" type="number" placeholder={this.props.page.size} ref="pageSizeInput" onBlur={this.handlePageSize}/>
+            </div>
         </div>
     }
 }
 
 NavBar.propTypes = {
     links : propTypes.object,
-    onNavigate : propTypes.func
+    onNavigate : propTypes.func,
+    attributes : propTypes.object,
+    page : propTypes.object,
+    changePageSize : propTypes.func
 };

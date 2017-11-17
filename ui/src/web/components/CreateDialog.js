@@ -1,6 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import propTypes from "prop-types"
+
 export default class CreateDialog extends React.Component{
     constructor(props){
         super(props);
@@ -40,7 +41,7 @@ export default class CreateDialog extends React.Component{
                     <h2>{this.props.title}</h2>
                     <form>
                         {inputs}
-                        <button onClick={this.handleSubmit} className="submitDialogButton">Create</button>
+                        <button onClick={this.handleSubmit} className="submitDialogButton">Создать</button>
                     </form>
                 </div>
             </div>

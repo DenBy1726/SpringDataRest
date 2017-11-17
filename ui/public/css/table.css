@@ -8,12 +8,13 @@ table {
     border-spacing: 1px;
     border-collapse: collapse;
     background: white;
-    border-radius: 6px;
+    border-radius: 10px 0 0 0;
     overflow: hidden;
     max-width: 800px;
     width: 100%;
-    margin: 10px auto;
+    margin-top: 10px;
     position: relative;
+    table-layout: fixed;
 }
 table * {
     position: relative;
@@ -167,16 +168,17 @@ input.field {
 .close:hover { background: #00d9ff; }
 
 #addPageLink{
-    width:25px;
+    width:30px;
     height:25px;
     position: absolute;
     background: #FFED86;
     color: #9BC86A;
     font-size: 23px;
-    left:775px;
+    left:770px;
     font-weight: bold;
     text-decoration: none;
-    border-radius:  9px;
+    border-radius:  6px 6px 0 0;
+    padding-bottom: 5px;
     text-align: center;
 }
 
