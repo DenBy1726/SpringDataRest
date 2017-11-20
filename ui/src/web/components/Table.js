@@ -5,6 +5,7 @@ import client from '../client'
 import TableSchema from "./TableSchema";
 import CreateDialog from "./CreateDialog"
 import NavBar from "./NavBar"
+import ApplyDialog from "./ApplyDialog"
 
 const root = "/api/v1/";
 
@@ -22,6 +23,8 @@ export default class Table extends React.Component{
         this.onNavigate = this.onNavigate.bind(this);
         this.changePageSize = this.changePageSize.bind(this);
         this.sort = this.sort.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+        this.submitDeletion = this.submitDeletion.bind(this);
     }
 
     componentDidMount() {
@@ -55,6 +58,23 @@ export default class Table extends React.Component{
         client({method: 'GET', path: navUri}).done(pagesCollections => {
             this.updateContent(pagesCollections,attributes);
         });
+    }
+
+    onDelete(page){
+        client({method: 'DELETE', path: page._links.self.href}).done(response => {
+            this.loadFromServer(this.state.page.size);
+        });
+    }
+
+    submitDeletion(page){
+        let that = this;
+        this.refs.modal.open("Вы уверены?")
+            .then(function() {
+                that.onDelete(page);
+            })
+            .fail(function() {
+                // Отмена
+            });
     }
 
     updateContent(collection,attributes){
@@ -104,9 +124,10 @@ export default class Table extends React.Component{
     render(){
         return <div>
             <CreateDialog title="Добавить страницу" attributes={this.state.attributes} onCreate={this.onCreate}/>
+            <ApplyDialog text="Вы действительно хотите удалить эту запись?" ref="modal"/>
             <table>
                        <TableSchema data={this.state.attributes} sort={this.sort}/>
-                       <RowCollections data={this.state.concretePages}/>
+                       <RowCollections data={this.state.concretePages} delete={this.submitDeletion}/>
             </table>
             <NavBar links={this.state.links} onNavigate={this.onNavigate} attributes={this.state.attributes} page={this.state.page}
                 changePageSize={this.changePageSize}/>
