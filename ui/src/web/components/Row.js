@@ -18,6 +18,7 @@ export default class Row extends React.Component{
                     <td className="rowButton">
                         {this.props.data.category}
                         <button className="delButton fa fa-times" onClick={this.handleDelete}/>
+                        <a href="#updateElement" className="delButton fa fa-edit"/>
                     </td>
 
                 </tr>

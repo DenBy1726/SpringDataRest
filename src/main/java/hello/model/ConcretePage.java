@@ -1,5 +1,7 @@
 package hello.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +18,9 @@ public class ConcretePage {
 
 	@Column(name = "category")
 	private String category;
+
+	private @Version @JsonIgnore
+    Long version;
 
 	public String getTitle() {
 		return title;

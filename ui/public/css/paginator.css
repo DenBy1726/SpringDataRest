@@ -19,7 +19,7 @@
     border-bottom-right-radius: 10px;
 }
 
-.paginator a:hover:not(.active) {background-color: #eee}
+.paginator a:hover:not(.active) {color: white}
 
 .right{
     right:0;
