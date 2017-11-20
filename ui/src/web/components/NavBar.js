@@ -41,16 +41,16 @@ export default class NavBar extends React.Component{
     render(){
         let navLinks = [];
         if ("first" in this.props.links) {
-            navLinks.push(<a key="first" onClick={this.handleNavFirst}>&lt;&lt;</a>);
+            navLinks.push(<a key="first" onClick={this.handleNavFirst} className="fa fa-angle-double-left"/>);
         }
         if ("prev" in this.props.links) {
-            navLinks.push(<a key="prev" onClick={this.handleNavPrev}>&lt;</a>);
+            navLinks.push(<a key="prev" onClick={this.handleNavPrev} className="fa fa-angle-left"/>);
         }
         if ("next" in this.props.links) {
-            navLinks.push(<a key="next" onClick={this.handleNavNext}>&gt;</a>);
+            navLinks.push(<a key="next" onClick={this.handleNavNext} className="fa fa-angle-right"/>);
         }
         if ("last" in this.props.links) {
-            navLinks.push(<a key="last" onClick={this.handleNavLast}>&gt;&gt;</a>);
+            navLinks.push(<a key="last" onClick={this.handleNavLast} className="fa fa-angle-double-right"/>);
         }
         return <div className="paginationTab">
             <div className="paginator">

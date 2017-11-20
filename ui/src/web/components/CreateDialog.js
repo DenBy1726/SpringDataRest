@@ -11,14 +11,28 @@ export default class CreateDialog extends React.Component{
     handleSubmit(e) {
         e.preventDefault();
         let newPage = {};
+        let wasError = false;
         this.props.attributes.forEach(attribute => {
+            let node = ReactDOM.findDOMNode(this.refs[attribute]);
+            let value = node.value.trim();
+            if(value === "") {
+                node.className += " validationError";
+                wasError = true;
+                return;
+            }
+            else
+                node.className = "field";
             newPage[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
         });
+        if(wasError)
+            return;
+
         this.props.onCreate(newPage);
 
         // очистить все поля
         this.props.attributes.forEach(attribute => {
-            ReactDOM.findDOMNode(this.refs[attribute]).value = '';
+
+            ReactDOM.findDOMNode(this.refs[attribute]).className = "field";
         });
         
         // скрыть диалог
@@ -36,7 +50,7 @@ export default class CreateDialog extends React.Component{
         return <div id="addBar">
             <a href="#createElement" id="addPageLink" className="fa fa-plus"/>
             <div id="createElement" className="modalDialog">
-                <div>
+                <div style={{textAlign:"center"}}>
                     <a href="#" title="Close" className="close">X</a>
                     <h2>{this.props.title}</h2>
                     <form>
