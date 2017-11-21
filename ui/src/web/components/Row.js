@@ -6,10 +6,15 @@ export default class Row extends React.Component{
         super(props);
 
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
 
     handleDelete(){
         this.props.delete(this.props.data);
+    }
+
+    handleEdit(){
+        this.props.edit(this.props.data);
     }
 
     render(){
@@ -18,7 +23,7 @@ export default class Row extends React.Component{
                     <td className="rowButton">
                         {this.props.data.category}
                         <button className="delButton fa fa-times" onClick={this.handleDelete}/>
-                        <a href="#updateElement" className="delButton fa fa-edit"/>
+                        <button className="delButton fa fa-edit" onClick={this.handleEdit}/>
                     </td>
 
                 </tr>
@@ -28,5 +33,6 @@ export default class Row extends React.Component{
 
 Row.propTypes = {
     data : propTypes.object,
-    delete : propTypes.func
+    delete : propTypes.func,
+    edit: propTypes.func
 };

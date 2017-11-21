@@ -13,22 +13,18 @@ export default class NavBar extends React.Component{
     }
 
     handleNavFirst(e){
-        e.preventDefault();
         this.props.onNavigate(this.props.links.first.href,this.props.attributes);
     }
 
     handleNavPrev(e) {
-        e.preventDefault();
         this.props.onNavigate(this.props.links.prev.href,this.props.attributes);
     }
 
     handleNavNext(e) {
-        e.preventDefault();
         this.props.onNavigate(this.props.links.next.href,this.props.attributes);
     }
 
     handleNavLast(e) {
-        e.preventDefault();
         this.props.onNavigate(this.props.links.last.href,this.props.attributes);
     }
 

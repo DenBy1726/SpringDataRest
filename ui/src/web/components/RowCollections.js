@@ -8,9 +8,10 @@ export default class RowCollections extends React.Component{
     }
 
     render(){
+        console.log(this.props.data);
         return  <tbody>
         {
-            this.props.data.map(x => <Row key={x._links.self.href} data={x} delete={this.props.delete}/>)
+            this.props.data.map(x => <Row key={x._links.self.href} data={x} delete={this.props.delete} edit={this.props.edit}/>)
         }
         </tbody>
 
@@ -20,4 +21,5 @@ export default class RowCollections extends React.Component{
 RowCollections.propTypes = {
     data : propTypes.object,
     delete : propTypes.func,
+    edit : propTypes.func
 };
