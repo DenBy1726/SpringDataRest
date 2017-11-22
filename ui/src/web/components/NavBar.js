@@ -53,7 +53,7 @@ export default class NavBar extends React.Component{
                 {navLinks}
             </div>
             <div>
-                <a className="paginationInfo">Всего страниц {this.props.page.totalElements}</a>
+                <a className="paginationInfo">Всего записей {this.props.page.totalElements}</a>
                 <a className="paginationInfo">Страница {this.props.page.number + 1} из {this.props.page.totalPages}</a>
                 <a className="paginationInfo">Размер страницы</a>
                 <input id="pageSizeInput" type="number" placeholder={this.props.page.size} ref="pageSizeInput" onBlur={this.handlePageSize}/>

@@ -5,7 +5,6 @@ import client from '../client'
 import TableSchema from "./TableSchema";
 import NavBar from "./NavBar"
 import ModalDialog from "./ModalDialog"
-import when from 'when';
 
 const root = "/api/v1/";
 

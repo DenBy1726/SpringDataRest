@@ -19,9 +19,6 @@ public class ConcretePage {
 	@Column(name = "category")
 	private String category;
 
-	private @Version @JsonIgnore
-    Long version;
-
 	public String getTitle() {
 		return title;
 	}
