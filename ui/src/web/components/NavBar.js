@@ -13,19 +13,19 @@ export default class NavBar extends React.Component{
     }
 
     handleNavFirst(e){
-        this.props.onNavigate(this.props.links.first.href,this.props.attributes);
+        this.props.onNavigate(this.props.links.first.href);
     }
 
     handleNavPrev(e) {
-        this.props.onNavigate(this.props.links.prev.href,this.props.attributes);
+        this.props.onNavigate(this.props.links.prev.href);
     }
 
     handleNavNext(e) {
-        this.props.onNavigate(this.props.links.next.href,this.props.attributes);
+        this.props.onNavigate(this.props.links.next.href);
     }
 
     handleNavLast(e) {
-        this.props.onNavigate(this.props.links.last.href,this.props.attributes);
+        this.props.onNavigate(this.props.links.last.href);
     }
 
     handlePageSize(){

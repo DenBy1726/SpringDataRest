@@ -8,7 +8,6 @@ export default class RowCollections extends React.Component{
     }
 
     render(){
-        console.log(this.props.data);
         return  <tbody>
         {
             this.props.data.map(x => <Row key={x._links.self.href} data={x} delete={this.props.delete} edit={this.props.edit}/>)
