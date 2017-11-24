@@ -1,8 +1,8 @@
-import {load,updateState,create,navigate,Delete,update} from "./actionFunc"
+import {loadWithSchema,updateState,create,navigate,Delete,update} from "./actionFunc"
 
 //событие начала добавления страницы
 //если успешно то вызовет LOAD_PAGES:finish
-export function addPage() {
+export function pageAdding() {
     return {
         type: "PAGE_ADDING",
     }
@@ -43,18 +43,18 @@ export function pageLoaded(collection,attributes,params){
 }
 
 export function loadPages(size,sortBy,sortOrder) {
-    return load(size,sortBy,sortOrder);
+    return loadWithSchema(size,sortBy,sortOrder);
 }
 
 export function createPage(page,attributes,params){
     return create(page,attributes,params);
 }
 
-export function navigatePages(url,attributes,params){
+export function navigatePage(url, attributes, params){
     return navigate(url,attributes,params);
 }
 
-export function deletePages(url,attributes,params){
+export function deletePage(url, attributes, params){
     return Delete(url,attributes,params);
 }
 
@@ -62,7 +62,7 @@ export function updatePage(page,newPage,attributes,params){
     return update(page,newPage,attributes,params);
 }
 
-export default {addPage,deletePages,updatePage,pageUpdating,loadPages,pageLoading,pageDeleting,pageLoaded,createPage,navigatePages}
+export default {createPage,deletePage,updatePage,loadPages,navigatePage,pageUpdating,pageDeleting,pageAdding,pageLoading,pageLoaded}
 
 
 

@@ -31,6 +31,6 @@ export default class TableSchema extends React.Component{
 };
 
 TableSchema.propTypes = {
-    data : propTypes.array,
-    sort : propTypes.func
+    data : propTypes.array.isRequired,
+    sort : propTypes.func.isRequired
 };

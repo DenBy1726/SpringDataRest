@@ -41,11 +41,11 @@ class Table extends React.Component{
     }
 
     onNavigate(navUri) {
-        this.props.navigatePages(navUri,this.props.attributes,this.props.params);
+        this.props.navigatePage(navUri,this.props.attributes,this.props.params);
     }
 
     onDelete(page){
-       this.props.deletePages(page._links.self.href,this.props.attributes,this.props.params);
+       this.props.deletePage(page._links.self.href,this.props.attributes,this.props.params);
     }
 
     loadFromServer(pageSize,sortBy,sortOrder) {

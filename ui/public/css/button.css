@@ -11,8 +11,7 @@
 }
 
 .delButton:hover{
-    background-color: #FFED86;
-    color: white;
+    color: #FFED86;
 }
 
 .validationError{

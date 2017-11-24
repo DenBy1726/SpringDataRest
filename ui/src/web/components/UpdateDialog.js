@@ -64,9 +64,9 @@ export default class CreateDialog extends React.Component{
 }
 
 CreateDialog.propTypes ={
-    title : propTypes.string,
-    attributes : propTypes.array,
-    data : propTypes.object,
-    onCreate : propTypes.func
+    title : propTypes.string.isRequired,
+    attributes : propTypes.array.isRequired,
+    data : propTypes.object.isRequired,
+    onCreate : propTypes.func.isRequired
 };
 

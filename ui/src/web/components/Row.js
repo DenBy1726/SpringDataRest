@@ -32,7 +32,7 @@ export default class Row extends React.Component{
 };
 
 Row.propTypes = {
-    data : propTypes.object,
-    delete : propTypes.func,
-    edit: propTypes.func
+    data : propTypes.object.isRequired,
+    delete : propTypes.func.isRequired,
+    edit: propTypes.func.isRequired
 };

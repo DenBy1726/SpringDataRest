@@ -63,9 +63,9 @@ export default class NavBar extends React.Component{
 }
 
 NavBar.propTypes = {
-    links : propTypes.object,
-    onNavigate : propTypes.func,
-    attributes : propTypes.object,
-    page : propTypes.object,
-    changePageSize : propTypes.func
+    links : propTypes.object.isRequired,
+    onNavigate : propTypes.func.isRequired,
+    attributes : propTypes.object.isRequired,
+    page : propTypes.object.isRequired,
+    changePageSize : propTypes.func.isRequired
 };

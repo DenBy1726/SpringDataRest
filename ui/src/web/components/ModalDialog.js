@@ -118,8 +118,8 @@ export default class ModalDialog extends React.Component{
 }
 
 ModalDialog.propTypes ={
-    title : propTypes.string,
-    onCreate : propTypes.func,
-    data : propTypes.object
+    title : propTypes.string.isRequired,
+    onCreate : propTypes.func.isRequired,
+    data : propTypes.object.isRequired
 };
 

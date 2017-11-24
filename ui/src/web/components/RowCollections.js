@@ -18,7 +18,7 @@ export default class RowCollections extends React.Component{
 };
 
 RowCollections.propTypes = {
-    data : propTypes.object,
-    delete : propTypes.func,
-    edit : propTypes.func
+    data : propTypes.object.isRequired,
+    delete : propTypes.func.isRequired,
+    edit : propTypes.func.isRequired
 };
