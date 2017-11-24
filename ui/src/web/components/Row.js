@@ -23,7 +23,7 @@ export default class Row extends React.Component{
                     <td className="rowButton">
                         {this.props.data.category}
                         <button className="delButton fa fa-times" onClick={this.handleDelete}/>
-                        <button className="delButton fa fa-edit" onClick={this.handleEdit}/>
+                        <button className="delButton fa fa-pencil" onClick={this.handleEdit}/>
                     </td>
 
                 </tr>
