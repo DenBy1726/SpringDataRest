@@ -1,11 +1,15 @@
 'use strict';
 import ReactDOM from 'react-dom'
 import React from 'react'
-import Table from './components/Table'
+import Table from './components/obsolete/Table'
 let redux = require("redux");
 let Provider = require("react-redux").Provider;
 import reducer from "./reducers/reducer.js"
 import thunk from 'redux-thunk' // <-- добавили redux-thunk
+import {applyMiddleware} from "redux"
+import App from "./components/App"
+import ruRU from 'antd/lib/locale-provider/ru_RU';
+import LocaleProvider from "antd"
 
 let size = 10;
 if(localStorage.getItem('pageSize') != null)
@@ -13,20 +17,12 @@ if(localStorage.getItem('pageSize') != null)
 let initialState = {concretePages: [], attributes: [], page: {size:size}, links: {}, fetching:false};
 
 //связь хранилища с функцией обновления состояния.
-let store = redux.createStore(reducer,initialState,redux.applyMiddleware(thunk));
+let store = redux.createStore(reducer,initialState,applyMiddleware(thunk));
 
-//отправка запроса на инициализацию (установка первоначального состояния)
-store.dispatch({
-    type: "LOAD_PAGES",
-    size: 8,
-    sortBy: "title",
-    sortOrder: "desc"
-
-});
 
     ReactDOM.render(
         <Provider store={store}>
-            <Table/>
+                <App/>
         </Provider>,
         document.getElementById("root")
     );

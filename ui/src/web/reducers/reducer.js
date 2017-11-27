@@ -21,7 +21,7 @@ let reducer = function(state, action) {
                     return state;
                 case "finish" :
                     console.log("reducer LOAD_PAGES loaded");
-                    action.fetching = true;
+                    action.result.fetching = true;
                     return action.result;
             }
             return state;

@@ -28,7 +28,6 @@ module.exports = {
         // }
     },
     module:{
-
         rules:[   //загрузчик для jsx
             {
                 test: /\.jsx?$/, // определяем тип файлов
@@ -37,7 +36,8 @@ module.exports = {
                 options:{
                     presets:["env", "react"]    // используемые плагины
                 }
-            }
+            },
+            { test: /\.css$/, loader: "style-loader!css-loader" }
         ]
     }
 }

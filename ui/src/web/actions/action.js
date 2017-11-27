@@ -1,4 +1,4 @@
-import {loadWithSchema,updateState,create,navigate,Delete,update} from "./actionFunc"
+import {loadWithSchema,load,updateState,create,navigate,Delete,update} from "./actionFunc"
 
 //событие начала добавления страницы
 //если успешно то вызовет LOAD_PAGES:finish
@@ -50,9 +50,23 @@ export function createPage(page,attributes,params){
     return create(page,attributes,params);
 }
 
-export function navigatePage(url, attributes, params){
-    return navigate(url,attributes,params);
+export function navigatePage(page,sorter,attributes){
+    let params = {
+        page: page.current-1,
+        size: page.pageSize
+    };
+
+    switch(sorter.order){
+        case "descend":
+            params.sort = sorter.field + "," + "desc";
+            break;
+        case "ascend":
+            params.sort = sorter.field + "," + "asc";
+            break;
+    }
+    return load(attributes,params);
 }
+
 
 export function deletePage(url, attributes, params){
     return Delete(url,attributes,params);

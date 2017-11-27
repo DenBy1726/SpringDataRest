@@ -1,11 +1,11 @@
 import React from "react"
 import RowCollections from "./RowCollections"
-import follow from '../follow'
-import client from '../client'
+import follow from '../../follow'
+import client from '../../client'
 import TableSchema from "./TableSchema";
 import NavBar from "./NavBar"
-import ModalDialog from "./ModalDialog"
-import actions from "../actions/action"
+import ModalDialog from "../ModalDialog"
+import actions from "../../actions/action"
 let connect = require("react-redux").connect;
 
 const root = "/api/v1/";

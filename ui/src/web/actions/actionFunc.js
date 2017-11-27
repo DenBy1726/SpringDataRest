@@ -51,7 +51,7 @@ function loadData(params) {
     );
 }
 
-function makeParams(size,sortBy,sortOrder){
+function makeParams(size,sortBy,sortOrder,page){
     let params = {size: size};
     if (sortBy != "undefined" && sortOrder != "undefined")
         params.sort = sortBy + "," + sortOrder;
