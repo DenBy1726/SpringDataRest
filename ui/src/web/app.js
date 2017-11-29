@@ -4,25 +4,46 @@ import React from 'react'
 import Table from './components/obsolete/Table'
 let redux = require("redux");
 let Provider = require("react-redux").Provider;
-import reducer from "./reducers/reducer.js"
+import concretePages from "./reducers/reducer.js"
 import thunk from 'redux-thunk' // <-- добавили redux-thunk
 import {applyMiddleware} from "redux"
 import App from "./components/App"
 import ruRU from 'antd/lib/locale-provider/ru_RU';
 import LocaleProvider from "antd"
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+// import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import {createBrowserHistory} from 'history';
+
+import Routes from "./components/Routes";
+import BrowserRouter from "react-router-dom/es/BrowserRouter";
 
 let size = 10;
 if(localStorage.getItem('pageSize') != null)
     size = Number.parseInt(localStorage.getItem('pageSize'));
-let initialState = {concretePages: [], attributes: [], page: {size:size}, links: {}, fetching:false};
+const initialState = {concretePages: [], attributes: [], page: {size:size}, links: {}, fetching:false};
+
+const combineReducer = redux.combineReducers({
+    concretePages,
+    routing: routerReducer
+});
 
 //связь хранилища с функцией обновления состояния.
-let store = redux.createStore(reducer,initialState,applyMiddleware(thunk));
+let store = redux.createStore(combineReducer,initialState,applyMiddleware(thunk));
 
+const history = syncHistoryWithStore(createBrowserHistory(), store);
 
-    ReactDOM.render(
+ReactDOM.render(
+    <Provider store={store}>
+        <BrowserRouter>
+            <App history={history}/>
+        </BrowserRouter>
+    </Provider>
+    ,
+    document.getElementById("root"));
+
+  /*  ReactDOM.render(
         <Provider store={store}>
-                <App/>
+
         </Provider>,
         document.getElementById("root")
-    );
+    );*/

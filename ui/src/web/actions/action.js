@@ -46,14 +46,18 @@ export function loadPages(size,sortBy,sortOrder) {
     return loadWithSchema(size,sortBy,sortOrder);
 }
 
+export function updateAll(attributes,params){
+    return load(attributes,params);
+}
+
 export function createPage(page,attributes,params){
     return create(page,attributes,params);
 }
 
 export function navigatePage(page,sorter,attributes){
     let params = {
-        page: page.current-1,
-        size: page.pageSize
+        current: page.current,
+        pageSize: page.pageSize
     };
 
     switch(sorter.order){
@@ -76,7 +80,7 @@ export function updatePage(page,newPage,attributes,params){
     return update(page,newPage,attributes,params);
 }
 
-export default {createPage,deletePage,updatePage,loadPages,navigatePage,pageUpdating,pageDeleting,pageAdding,pageLoading,pageLoaded}
+export default {createPage,deletePage,updatePage,updateAll,loadPages,navigatePage,pageUpdating,pageDeleting,pageAdding,pageLoading,pageLoaded}
 
 
 

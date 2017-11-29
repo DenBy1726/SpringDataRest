@@ -25,11 +25,11 @@ export function loadWithSchema(size, sortBy, sortOrder) {
     }
 }
 
-export function load(attributes,params){
+export function load(attributes,page){
     return function (dispatch) {
 
         dispatch(actions.pageLoading());
-
+        let params = paramsFromPage(page);
         return loadData(params)
             .done(collections=>{
                 dispatch(actions.pageLoaded(collections, attributes, params))
@@ -56,6 +56,10 @@ function makeParams(size,sortBy,sortOrder,page){
     if (sortBy != "undefined" && sortOrder != "undefined")
         params.sort = sortBy + "," + sortOrder;
     return params;
+}
+
+function paramsFromPage(page){
+   return {size: page.pageSize, page: page.current-1};
 }
 
 
@@ -120,9 +124,13 @@ export function update(page,updatedPage,attributes,params) {
 
 export function updateState(collection,attributes,params){
     return {
-        concretePages: collection.entity._embedded.concretePages,
+        data: collection.entity._embedded.concretePages,
         attributes: attributes,
-        page: collection.entity.page,
+        page: {
+            current: collection.entity.page.number + 1,
+            pageSize: collection.entity.page.size,
+            total: collection.entity.page.totalElements
+        },
         links: collection.entity._links,
         params: params
     }

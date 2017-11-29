@@ -1,65 +1,30 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+// import ReactDOM from 'react-dom'
 import {Table,Icon,Button,Popconfirm,Input} from "antd"
 import ModalDialog from "./ModalDialog"
+import EditPage from "./EditPage"
 import actions from "../actions/action"
 let connect = require("react-redux").connect;
-import ruRU from 'antd/lib/locale-provider/ru_RU';
-import LocaleProvider from "antd"
+import { Route, Switch, withRouter, NavLink, Link } from 'react-router-dom';
+// import ruRU from 'antd/lib/locale-provider/ru_RU';
+// import LocaleProvider from "antd"
 
 require('antd/dist/antd.css');
 
-
-const EditableCell = ({ editable, value,onChange}) => {
-    return <div>
-        {editable
-            ? <Input style={{margin: '-5px 0'}} placeholder={value} onChange={e => onChange(e.target.value)}/>
-            : value
-        }
-    </div>
-};
 
 class App extends React.Component{
 
     constructor(props) {
         super(props);
-
-        this.backup = null;
-        this.tempObj = {};
-        this.state = {editableId:-1};
-
+        this.attributes = [];
+        this.page = [];
         this.onNavigate = this.onNavigate.bind(this);
         this.submitAdd = this.submitAdd.bind(this);
         this.onCreate = this.onCreate.bind(this);
-        this.edit = this.edit.bind(this);
-        this.cancel = this.cancel.bind(this);
-        this.save = this.save.bind(this);
-        this.renderColumns = this.renderColumns.bind(this);
-        this.editTextChanged = this.editTextChanged.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
+        this.onCancel = this.onCancel.bind(this);
     }
 
-    renderColumns(record, column) {
-        return (
-            <EditableCell
-                editable={false}
-                value={record[column]}
-            />
-        );
-    }
-
-    editingRenderColumns(record, column) {
-        return (
-            <EditableCell
-                editable={true}
-                value={record[column]}
-                onChange={(e) => this.editTextChanged(e,column)}
-            />
-        );
-    }
-
-    editTextChanged(e,column){
-        this.tempObj[column] = e;
-    }
 
     componentDidMount(){
         //грузим данные с сервера, устанавливаем размер страницы
@@ -76,7 +41,7 @@ class App extends React.Component{
     }
 
     onDelete(page){
-        this.props.deletePage(page._links.self.href,this.props.attributes,this.props.params);
+        this.props.deletePage(page._links.self.href,this.props.attributes,this.props.page);
     }
 
     submitAdd(){
@@ -88,49 +53,31 @@ class App extends React.Component{
             });
     }
 
-
     onUpdate(page, updatedPage) {
-        this.props.updatePage(page,updatedPage,this.props.attributes,this.props.params);
+        this.props.updatePage(page,updatedPage,this.props.attributes,this.props.page);
     }
-
-    edit(key) {
-        this.backup = key;
-        this.tempObj = {};
-        this.setState({editableId: key.id});
-    }
-
-    save(){
-        this.onUpdate(this.backup,this.tempObj);
-        this.setState({editableId: -1});
-    }
-
-    cancel(key){
-        this.setState({editableId: -1,});
-        key = this.backup;
-        this.backup = null;
-    }
-
-
 
     //добавить запись
     onCreate(newPage){
         //отправляем на сервер данное
-        this.props.createPage(newPage,this.props.attributes,this.props.params);
+        this.props.createPage(newPage,this.props.attributes,this.props.page);
     }
 
+    onCancel(){
+        this.props.updateAll(this.attributes,this.page);
+    }
+
+
     render(){
+        this.attributes = this.props.attributes;
+        this.page = this.props.page;
+        console.log(this);
         let columns = this.props.attributes.map(x=> {
             return {
                 title: x,
                 dataIndex: x,
                 key: x.id,
-                sorter: true,
-                render: (text,record) => {
-                    if(this.state.editableId === record.id) {
-                        return this.editingRenderColumns(record, x);
-                    }
-                    else
-                        return this.renderColumns(record, x)}
+                sorter: true
             }
         });
 
@@ -141,25 +88,12 @@ class App extends React.Component{
                 width: '10%',
                 render: (text, record) => {
                     const deleteButton =
-                        this.state.editableId === -1 ?
-                            <Popconfirm title="Вы уверены что хотите удалить запись?" okText="Да" cancelText="Нет" onConfirm={() => this.onDelete(record)}>
+                            <Popconfirm title="Вы уверены что хотите удалить запись?" okText="Да" cancelText="Нет" onConfirm={this.onCancel}>
                                 <button className="delButton fa fa-times" href="#" />
-                            </Popconfirm>
-                                : null;
+                            </Popconfirm>;
                     const editButton = <div className="editable-row-operations">
-                            {
-                                this.state.editableId !== -1 ?
-                                        <span>
-                                          <button className="delButton fa fa-save" onClick={this.save} />
-                                          <Popconfirm title="Вы уверены что хотите выйти из режима редактирования?" okText="Да" cancelText="Нет" onConfirm={() => this.cancel(record)}>
-                                            <button className="delButton fa fa-ban"/>
-                                          </Popconfirm>
-                                        </span>
-                                    : <button className="delButton fa fa-pencil" onClick={() => this.edit(record)} />
-                            }
+                                            <button className="delButton fa fa-pencil" onClick={()=>this.props.history.push(`/Edit/${record.id}`)}/>
                                         </div>;
-
-
                     return (
                         <span>
                             {deleteButton}
@@ -176,39 +110,59 @@ class App extends React.Component{
             data[i].key = i;
         }
 
-        let pagination = {total: this.props.page.totalElements};
-
-        if(localStorage.getItem('pageSize') != null)
-            pagination.pageSize = Number.parseInt(localStorage.getItem('pageSize'));
-
         return (
             <div>
-                <ModalDialog attributes={this.props.attributes} ref="addModal"/>
-                <ModalDialog attributes={this.props.attributes} ref="editModal" />
-                <Button onClick={this.submitAdd}>Добавить</Button>
-                <Table columns={columns} dataSource={data} loading={!this.props.fetching}
-                      pagination={pagination} onChange={this.onNavigate}
-                       />
+                    <Switch history={this.props.history}>
+                            <Route exact path="/">
+                                <div>
+                                    <ModalDialog attributes={this.props.attributes} ref="addModal"/>
+                                    <ModalDialog attributes={this.props.attributes} ref="editModal" />
+                                    <Button onClick={this.submitAdd}>Добавить</Button>
+                                    <Table columns={columns} dataSource={data} loading={!this.props.fetching}
+                                          pagination={this.props.page} onChange={this.onNavigate}
+                                           />
+                                </div>
+                            </Route>
+                            <Route path="/Edit/:id">
+                                <div>
+                                    <EditPage attributes={this.props.attributes}
+                                              data={this.props.concretePages} OK={this.onUpdate} Cancel={this.onCancel}/>
+                                </div>
+                            </Route>
+                    </Switch>
             </div>
         )
-
     }
 }
 
 
+
+/* <Switch history={this.props.history}>
+                            <Route exact path="/">
+                                <ModalDialog attributes={this.props.attributes} ref="addModal"/>
+                                <ModalDialog attributes={this.props.attributes} ref="editModal" />
+                                <Button onClick={this.submitAdd}>Добавить</Button>
+                                <Table columns={columns} dataSource={data} loading={!this.props.fetching}
+                                      pagination={pagination} onChange={this.onNavigate}
+                                       />
+                            </Route>
+                            <Route path="/Edit/:id">
+                                <EditPage attributes={this.props.attributes} data={this.props.concretePages} OK={this.onUpdate} Cancel={()=>{}}/>
+                            </Route>
+                    </Switch>*/
+
 function mapStateToProps(state) {
     return {
         //данные
-        concretePages: state.concretePages,
+        concretePages: state.concretePages.data,
         //схема
-        attributes: state.attributes,
+        attributes: state.concretePages.attributes,
         //информация о пагинации
-        page:state.page,
-        params: state.params,
-        fetching: state.fetching
+        page:state.concretePages.page,
+        params: state.concretePages.params,
+        fetching: state.concretePages.fetching
     };
 }
 
 //связываем действия и состояние с видом
-module.exports = connect(mapStateToProps, actions)(App);
-export default App;
+export default withRouter(connect(mapStateToProps, actions)(App));
