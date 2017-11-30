@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build" : "webpack",
-    "run" : "webpack-dev-server"
+    "run" : "webpack-dev-server --hot"
   },
   "dependencies": {
     "react": "15.0.0",

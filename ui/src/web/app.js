@@ -14,21 +14,17 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 // import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import {createBrowserHistory} from 'history';
 
-import Routes from "./components/Routes";
 import BrowserRouter from "react-router-dom/es/BrowserRouter";
 
-let size = 10;
-if(localStorage.getItem('pageSize') != null)
-    size = Number.parseInt(localStorage.getItem('pageSize'));
-const initialState = {concretePages: [], attributes: [], page: {size:size}, links: {}, fetching:false};
+
 
 const combineReducer = redux.combineReducers({
-    concretePages,
+    data: concretePages,
     routing: routerReducer
 });
 
 //связь хранилища с функцией обновления состояния.
-let store = redux.createStore(combineReducer,initialState,applyMiddleware(thunk));
+let store = redux.createStore(combineReducer,applyMiddleware(thunk));
 
 const history = syncHistoryWithStore(createBrowserHistory(), store);
 
