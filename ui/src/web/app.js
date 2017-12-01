@@ -19,7 +19,7 @@ import BrowserRouter from "react-router-dom/es/BrowserRouter";
 
 
 const combineReducer = redux.combineReducers({
-    data: concretePages,
+    concretePages: concretePages,
     routing: routerReducer
 });
 

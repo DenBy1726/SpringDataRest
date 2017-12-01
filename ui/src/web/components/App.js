@@ -3,7 +3,7 @@ import React from 'react'
 import {Table,Icon,Button,Popconfirm,Input} from "antd"
 import ModalDialog from "./ModalDialog"
 import EditPage from "./EditPage"
-import actions from "../actions/action"
+import actions from "../actions/concretePages/action"
 let connect = require("react-redux").connect;
 import { Route, Switch, withRouter, NavLink, Link } from 'react-router-dom';
 // import ruRU from 'antd/lib/locale-provider/ru_RU';
@@ -28,20 +28,20 @@ class App extends React.Component{
 
     componentDidMount(){
         //грузим данные с сервера, устанавливаем размер страницы
-        this.loadFromServer(this.props.page.size,"title","desc");
+        this.loadFromServer(8,"title","desc");
     }
 
     loadFromServer(pageSize,sortBy,sortOrder) {
         //параметризируем сортировку и размер страниц
-        this.props.loadPages(pageSize,sortBy,sortOrder);
+        this.props.loadAll({pageSize:pageSize},{field:sortBy,order:sortOrder});
     }
 
     onNavigate(page,filter,sorter) {
-        this.props.navigatePage(page,sorter,this.props.attributes);
+        this.props.navigate(page,sorter,this.props.attributes);
     }
 
     onDelete(page){
-        this.props.deletePage(page._links.self.href,this.props.attributes,this.props.page);
+        this.props.delete(page._links.self.href,this.props.attributes,this.props.page);
     }
 
     submitAdd(){
@@ -54,17 +54,17 @@ class App extends React.Component{
     }
 
     onUpdate(page, updatedPage) {
-        this.props.updatePage(page,updatedPage,this.props.attributes,this.props.page);
+        this.props.update(page,updatedPage,this.props.attributes,this.props.page);
     }
 
     //добавить запись
     onCreate(newPage){
         //отправляем на сервер данное
-        this.props.createPage(newPage,this.props.attributes,this.props.page);
+        this.props.create(newPage,this.props.attributes,this.props.page);
     }
 
     onCancel(){
-        this.props.updateAll(this.attributes,this.page);
+        this.props.load(this.attributes,this.page);
     }
 
 
