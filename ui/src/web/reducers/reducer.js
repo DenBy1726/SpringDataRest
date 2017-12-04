@@ -23,6 +23,11 @@ let concretePages = function(state, action) {
                 case "finish" :
                     console.log("data LOAD_PAGES loaded");
                     action.result.fetching = true;
+                    action.result.data.forEach(x=>{
+                        x.birthday = new Date(x.birthday);
+                        x.register_on = new Date(x.register_on);
+                    });
+                    action.result.attributes = action.result.attributes.sort((x,y)=> x < y);
                     return action.result;
             }
             return state;

@@ -23,6 +23,7 @@ public class User {
     private long age;
 
     @Column(name = "birthday")
+    @Temporal(TemporalType.DATE)
     private Date birthday;
 
     @CreationTimestamp

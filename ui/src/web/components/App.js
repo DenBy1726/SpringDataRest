@@ -57,6 +57,7 @@ class App extends React.Component{
     }
 
     onUpdate(page, updatedPage) {
+        updatedPage.birthday = new Date(updatedPage.birthday).toUTCString();
         this.props.update(page,updatedPage,this.props.attributes,this.props.page);
     }
 
@@ -76,12 +77,17 @@ class App extends React.Component{
         this.page = this.props.page;
         console.log(this);
         let columns = this.props.attributes.map(x=> {
-            return {
+            let column = {
                 title: x,
                 dataIndex: x,
                 key: x.id,
                 sorter: true
-            }
+            };
+
+            if (x === "birthday")
+                column.render = text => text.toLocaleDateString();
+
+            return column;
         });
 
         columns.push(
@@ -111,6 +117,7 @@ class App extends React.Component{
         let data = this.props.concretePages;
         for (let i in data) {
             data[i].key = i;
+            data[i].age = getAge(data[i].birthday);
         }
 
         return (
@@ -150,21 +157,9 @@ class App extends React.Component{
     }
 }
 
-
-
-/* <Switch history={this.props.history}>
-                            <Route exact path="/">
-                                <ModalDialog attributes={this.props.attributes} ref="addModal"/>
-                                <ModalDialog attributes={this.props.attributes} ref="editModal" />
-                                <Button onClick={this.submitAdd}>Добавить</Button>
-                                <Table columns={columns} dataSource={data} loading={!this.props.fetching}
-                                      pagination={pagination} onChange={this.onNavigate}
-                                       />
-                            </Route>
-                            <Route path="/Edit/:id">
-                                <EditPage attributes={this.props.attributes} data={this.props.concretePages} OK={this.onUpdate} Cancel={()=>{}}/>
-                            </Route>
-                    </Switch>*/
+function getAge(date) {
+    return new Date().getYear() - date.getYear();
+}
 
 function mapStateToProps(state) {
     return {

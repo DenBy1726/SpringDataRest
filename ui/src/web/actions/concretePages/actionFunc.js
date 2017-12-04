@@ -9,7 +9,7 @@ export function loadWithSchema(page,sorter) {
     return function (dispatch) {
         return loadSchema()
             .then(schema=>{
-                dispatch(load(Object.keys(schema.entity.properties).filter(x => x !== 'id'),page,sorter));
+                dispatch(load(Object.keys(schema.entity.properties).filter(x => x !== 'id' && x !=='register_on'),page,sorter));
             })
     }
 }
@@ -34,7 +34,7 @@ export function load(attributes,page,sorter){
 function loadSchema(){
     return client({
         method: 'GET',
-        path: root + "profile/concretePages",
+        path: root + "profile/users",
         headers: {'Accept': 'application/schema+json'}
     });
 }
@@ -42,7 +42,7 @@ function loadSchema(){
 //загрузка данных
 function loadData(params) {
     return follow(client, root, [
-        {rel: 'concretePages', params: params}]
+        {rel: 'users', params: params}]
     );
 }
 
@@ -73,7 +73,7 @@ export function create(newPage,attributes,page){
         dispatch(actions.pageAdding());
         client({
             method: 'POST',
-            path: root + "concretePages",
+            path: root + "users",
             entity: newPage,
             headers: {'Content-Type': 'application/json'}
         }).done(response => {
@@ -99,7 +99,7 @@ export function update(page,updatedPage,attributes,params) {
     return function (dispatch) {
         actions.pageUpdating();
         client({
-            method: 'PUT',
+            method: 'PATCH',
             path: page._links.self.href,
             entity: updatedPage,
             headers: {
@@ -114,7 +114,7 @@ export function update(page,updatedPage,attributes,params) {
 //обновление данных
 export function updateState(collection,attributes){
     return {
-        data: collection.entity._embedded.concretePages,
+        data: collection.entity._embedded.users,
         attributes: attributes,
         page: {
             current: collection.entity.page.number + 1,
