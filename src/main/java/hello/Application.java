@@ -14,16 +14,9 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguratio
 import java.io.IOException;
 
 @SpringBootApplication
-//@PropertySource("classpath:application.properties")
 public class Application {
 
 	public static void main(String[] args) throws IOException {
-	/*	System.getProperties().put( "server.port", 8080 );
-        System.getProperties().put( "spring.data.rest.base-path", "/api/v1/" );
-        System.getProperties().put("spring.datasource.url","jdbc:postgresql://localhost:5432/postgres");
-        System.getProperties().put("spring.datasource.username","postgres");
-        System.getProperties().put("spring.datasource.password","root");
-        System.getProperties().put("spring.datasource.driverClassName","org.postgresql.Driver");*/
 		SpringApplication.run(Application.class, args);
 	}
 
