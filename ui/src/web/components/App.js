@@ -6,6 +6,9 @@ import EditPage from "./EditPage"
 import actions from "../actions/concretePages/action"
 let connect = require("react-redux").connect;
 import { Route, Switch, withRouter, NavLink, Link } from 'react-router-dom';
+import AppMenu from "./AppMenu";
+import MainPage from "./MainPage";
+import AddPage from "./AddPage";
 // import ruRU from 'antd/lib/locale-provider/ru_RU';
 // import LocaleProvider from "antd"
 
@@ -41,7 +44,7 @@ class App extends React.Component{
     }
 
     onDelete(page){
-        this.props.delete(page._links.self.href,this.props.attributes,this.props.page);
+        this.props.Delete(page._links.self.href,this.props.attributes,this.props.page);
     }
 
     submitAdd(){
@@ -85,14 +88,14 @@ class App extends React.Component{
             {
                 title: '',
                 dataIndex: 'operation',
-                width: '10%',
+                width: '20%',
                 render: (text, record) => {
                     const deleteButton =
-                            <Popconfirm title="Вы уверены что хотите удалить запись?" okText="Да" cancelText="Нет" onConfirm={this.onCancel}>
+                            <Popconfirm title="Вы уверены что хотите удалить запись?" okText="Да" cancelText="Нет" onConfirm={() => this.onDelete(record)}>
                                 <button className="delButton fa fa-times" href="#" />
                             </Popconfirm>;
                     const editButton = <div className="editable-row-operations">
-                                            <button className="delButton fa fa-pencil" onClick={()=>this.props.history.push(`/Edit/${record.id}`)}/>
+                                            <button className="delButton fa fa-pencil" onClick={()=>this.props.history.push(`/list/Edit/${record.id}`)}/>
                                         </div>;
                     return (
                         <span>
@@ -112,24 +115,36 @@ class App extends React.Component{
 
         return (
             <div>
-                    <Switch history={this.props.history}>
-                            <Route exact path="/">
-                                <div>
-                                    <ModalDialog attributes={this.props.attributes} ref="addModal"/>
-                                    <ModalDialog attributes={this.props.attributes} ref="editModal" />
-                                    <Button onClick={this.submitAdd}>Добавить</Button>
-                                    <Table columns={columns} dataSource={data} loading={!this.props.fetching}
-                                          pagination={this.props.page} onChange={this.onNavigate}
-                                           />
-                                </div>
-                            </Route>
-                            <Route path="/Edit/:id">
-                                <div>
-                                    <EditPage attributes={this.props.attributes}
-                                              data={this.props.concretePages} OK={this.onUpdate} Cancel={this.onCancel}/>
-                                </div>
-                            </Route>
+                <div style={{display: "flex", flexDirection: "row"}}>
+                    <Route path = "/">
+                        <AppMenu/>
+                    </Route>
+                    <Switch>
+                        <Route exact path="/" >
+                            <MainPage/>
+                        </Route>
+                        <Route exact path="/list/">
+                            <div>
+                                <Table columns={columns} dataSource={data} loading={!this.props.fetching}
+                                       pagination={this.props.page} onChange={this.onNavigate}
+                                />
+                            </div>
+                        </Route>
+                        <Route path="/list/Edit/:id">
+                            <div>
+                                <EditPage attributes={this.props.attributes}
+                                          data={this.props.concretePages} OK={this.onUpdate} Cancel={this.onCancel}/>
+                            </div>
+                        </Route>
+                        <Route path="/list/Add/">
+                            <div>
+                                <AddPage attributes={this.props.attributes}
+                                          OK={this.onCreate} Cancel={this.onCancel}/>
+                            </div>
+                        </Route>
                     </Switch>
+                </div>
+
             </div>
         )
     }

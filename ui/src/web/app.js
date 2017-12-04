@@ -14,7 +14,9 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 // import { Router, Route, IndexRoute, browserHistory } from 'react-router'
 import {createBrowserHistory} from 'history';
 
-import BrowserRouter from "react-router-dom/es/BrowserRouter";
+import {BrowserRouter,Switch,Route} from "react-router-dom";
+import MainPage from "./components/MainPage";
+import AppMenu from "./components/AppMenu";
 
 
 
@@ -36,10 +38,3 @@ ReactDOM.render(
     </Provider>
     ,
     document.getElementById("root"));
-
-  /*  ReactDOM.render(
-        <Provider store={store}>
-
-        </Provider>,
-        document.getElementById("root")
-    );*/

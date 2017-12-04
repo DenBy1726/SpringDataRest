@@ -17,8 +17,9 @@ let concretePages = function(state, action) {
             switch(action.state){
                 case "start":
                     console.log("data LOAD_PAGES loading");
-                    state.fetching = false;
-                    return state;
+                    action = {...state};
+                    action.fetching = false;
+                    return action;
                 case "finish" :
                     console.log("data LOAD_PAGES loaded");
                     action.result.fetching = true;

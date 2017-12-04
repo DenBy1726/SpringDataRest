@@ -7,7 +7,6 @@ const root = "/api/v1/";
 //загружает данные и схему
 export function loadWithSchema(page,sorter) {
     return function (dispatch) {
-
         return loadSchema()
             .then(schema=>{
                 dispatch(load(Object.keys(schema.entity.properties).filter(x => x !== 'id'),page,sorter));
@@ -28,7 +27,7 @@ export function load(attributes,page,sorter){
             .done(collections=>{
                 dispatch(actions.pageLoaded(collections, attributes, params))
             });
-    }
+    } 
 }
 
 //загрузка схемы
