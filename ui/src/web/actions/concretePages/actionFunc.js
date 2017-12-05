@@ -67,7 +67,7 @@ function combineParams(obj,obj2){
 
 
 //запрос на добавление
-export function create(newPage,attributes,page){
+export function create(newPage,attributes,page,sorter){
     //отправляем на сервер данное
     return function (dispatch) {
         dispatch(actions.pageAdding());
@@ -78,24 +78,24 @@ export function create(newPage,attributes,page){
             headers: {'Content-Type': 'application/json'}
         }).done(response => {
             page.current = Math.ceil((page.total + 1)/page.pageSize);
-            dispatch(load(attributes,page));
+            dispatch(load(attributes,page,sorter));
         });
     }
 }
 
 
 // запрсо на удаление
-export function Delete(url,attributes,params){
+export function Delete(url,attributes,page,sorter){
     return function (dispatch) {
         dispatch(actions.pageDeleting());
         client({method: 'DELETE', path: url}).done(response => {
-                dispatch(load(attributes,params));
+                dispatch(load(attributes,page,sorter));
         });
     }
 }
 
 //запрос на модификацию
-export function update(page,updatedPage,attributes,params) {
+export function update(page,updatedPage,attributes,pageParam,sorter) {
     return function (dispatch) {
         actions.pageUpdating();
         client({
@@ -106,7 +106,7 @@ export function update(page,updatedPage,attributes,params) {
                 'Content-Type': 'application/json',
             }
         }).done(response => {
-            dispatch(load(attributes,params));
+            dispatch(load(attributes,pageParam,sorter));
         });
     }
 }

@@ -21,6 +21,7 @@ class App extends React.Component{
         super(props);
         this.attributes = [];
         this.page = [];
+        this.sorter = undefined;
         this.onNavigate = this.onNavigate.bind(this);
         this.submitAdd = this.submitAdd.bind(this);
         this.onCreate = this.onCreate.bind(this);
@@ -50,10 +51,12 @@ class App extends React.Component{
 
     onNavigate(page,filter,sorter) {
         this.props.navigate(page,sorter,this.props.attributes);
+        this.sorter = sorter;
+
     }
 
     onDelete(page){
-        this.props.Delete(page._links.self.href,this.props.attributes,this.props.page);
+        this.props.Delete(page._links.self.href,this.props.attributes,this.props.page,this.sorter);
     }
 
     submitAdd(){
@@ -67,17 +70,17 @@ class App extends React.Component{
 
     onUpdate(page, updatedPage) {
         //updatedPage.birthday = new Date(updatedPage.birthday).toUTCString();
-        this.props.update(page,updatedPage,this.props.attributes,this.props.page);
+        this.props.update(page,updatedPage,this.props.attributes,this.props.page,this.sorter);
     }
 
     //добавить запись
     onCreate(newPage){
         //отправляем на сервер данное
-        this.props.create(newPage,this.props.attributes,this.props.page);
+        this.props.create(newPage,this.props.attributes,this.props.page,this.sorter);
     }
 
     onCancel(){
-        this.props.load(this.attributes,this.page);
+        this.props.load(this.attributes,this.page,this.sorter);
     }
 
 

@@ -4,12 +4,12 @@ export function loadAll(page,sorter) {
     return func.loadWithSchema(page,sorter);
 }
 
-export function load(attributes, params){
-    return func.load(attributes,params);
+export function load(attributes, params,sorter){
+    return func.load(attributes,params,sorter);
 }
 
-export function create(page, attributes, params){
-    return func.create(page,attributes,params);
+export function create(page, attributes, params,sorter){
+    return func.create(page,attributes,params,sorter);
 }
 
 export function navigate(page, sorter, attributes){
@@ -20,12 +20,12 @@ export function navigate(page, sorter, attributes){
 }
 
 
-export function Delete(url, attributes, params){
-    return func.Delete(url,attributes,params);
+export function Delete(url, attributes, params,sorter){
+    return func.Delete(url,attributes,params,sorter);
 }
 
-export function update(page, newPage, attributes, params){
-    return func.update(page,newPage,attributes,params);
+export function update(page, newPage, attributes, params,sorter){
+    return func.update(page,newPage,attributes,params,sorter);
 }
 
 export default {create,Delete,update,load,loadAll,navigate}

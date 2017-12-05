@@ -8,10 +8,10 @@ import concretePages from "./reducers/reducer.js"
 import thunk from 'redux-thunk' // <-- добавили redux-thunk
 import {applyMiddleware} from "redux"
 import App from "./components/App"
-import ruRU from 'antd/lib/locale-provider/ru_RU';
-import LocaleProvider from "antd"
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 // import { Router, Route, IndexRoute, browserHistory } from 'react-router'
+import { LocaleProvider } from 'antd';
+import ruRU from 'antd/lib/locale-provider/ru_RU';
 import {createBrowserHistory} from 'history';
 
 import {BrowserRouter,Switch,Route} from "react-router-dom";
@@ -33,7 +33,9 @@ const history = syncHistoryWithStore(createBrowserHistory(), store);
 ReactDOM.render(
     <Provider store={store}>
         <BrowserRouter>
-            <App history={history}/>
+            <LocaleProvider locale={ruRU}>
+                <App history={history}/>
+            </LocaleProvider>
         </BrowserRouter>
     </Provider>
     ,
