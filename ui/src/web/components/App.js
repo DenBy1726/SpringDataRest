@@ -34,6 +34,15 @@ class App extends React.Component{
         this.loadFromServer(8,"title","desc");
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+        //если пришли не из домена работы со списком, то перезагружаем
+        if(this.props.location.pathname.indexOf("list") === -1){
+            this.loadFromServer(8,"title","desc");
+            return false;
+        }
+        return true;
+    }
+
     loadFromServer(pageSize,sortBy,sortOrder) {
         //параметризируем сортировку и размер страниц
         this.props.loadAll({pageSize:pageSize},{field:sortBy,order:sortOrder});
@@ -57,7 +66,7 @@ class App extends React.Component{
     }
 
     onUpdate(page, updatedPage) {
-        updatedPage.birthday = new Date(updatedPage.birthday).toUTCString();
+        //updatedPage.birthday = new Date(updatedPage.birthday).toUTCString();
         this.props.update(page,updatedPage,this.props.attributes,this.props.page);
     }
 
@@ -138,13 +147,13 @@ class App extends React.Component{
                             </div>
                         </Route>
                         <Route path="/list/Edit/:id">
-                            <div>
+                            <div style={{width:"100%"}}>
                                 <EditPage attributes={this.props.attributes}
                                           data={this.props.concretePages} OK={this.onUpdate} Cancel={this.onCancel}/>
                             </div>
                         </Route>
                         <Route path="/list/Add/">
-                            <div>
+                            <div style={{width:"100%"}}>
                                 <AddPage attributes={this.props.attributes}
                                           OK={this.onCreate} Cancel={this.onCancel}/>
                             </div>
@@ -169,7 +178,6 @@ function mapStateToProps(state) {
         attributes: state.concretePages.attributes,
         //информация о пагинации
         page:state.concretePages.page,
-        params: state.concretePages.params,
         fetching: state.concretePages.fetching
     };
 }
