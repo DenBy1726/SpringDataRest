@@ -1,9 +1,13 @@
 package hello.model;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name="users")
@@ -26,10 +30,29 @@ public class User {
     @Temporal(TemporalType.DATE)
     private Date birthday;
 
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "register_on")
     private Date register_on;
+    
+    public Role getRole() {
+        return role;
+    }
+
+    public User(){
+        this.role = new Role();
+        role.setId(1);
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "role",referencedColumnName = "id",nullable = true)
+    private Role role;
 
     public long getId() {
         return Id;
