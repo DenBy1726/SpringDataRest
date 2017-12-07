@@ -14,25 +14,12 @@ import java.util.Set;
 @Table(name="role")
 public class Role {
 
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     @Column(name = "id")
     private long Id;
 
     @Column(name = "name")
     private String name;
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @ManyToMany(mappedBy = "role")
-    private Set<User> users = new HashSet<>();
-
 
 
     public long getId() {

@@ -38,7 +38,6 @@ public class User {
     @Column(name = "register_on")
     private Date register_on;
 
-
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "role_users",
