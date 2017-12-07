@@ -7,7 +7,9 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -35,24 +37,34 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "register_on")
     private Date register_on;
-    
-    public Role getRole() {
+
+
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "role_users",
+            joinColumns = { @JoinColumn(name = "id") },
+            inverseJoinColumns = { @JoinColumn(name = "role") }
+    )
+    private Set<Role> role = new HashSet<>();
+
+    public User(){
+        Role anonim = new Role();
+        anonim.setId(0);
+        role.add(anonim);
+    }
+
+    public Set<Role> getRole() {
         return role;
     }
 
-    public User(){
-        this.role = new Role();
-        role.setId(1);
-    }
 
-    public void setRole(Role role) {
+
+    public void setRole(Set<Role> role) {
         this.role = role;
     }
 
 
-    @ManyToOne
-    @JoinColumn(name = "role",referencedColumnName = "id",nullable = true)
-    private Role role;
+
 
     public long getId() {
         return Id;
