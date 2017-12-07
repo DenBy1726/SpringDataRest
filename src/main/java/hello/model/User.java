@@ -38,7 +38,7 @@ public class User {
     @Column(name = "register_on")
     private Date register_on;
 
-    @ManyToMany(cascade = { CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.REMOVE })
     @JoinTable(
             name = "role_users",
             joinColumns = { @JoinColumn(name = "id") },

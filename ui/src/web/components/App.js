@@ -98,7 +98,8 @@ class App extends React.Component{
 
             if (x === "birthday")
                 column.render = text => text.toLocaleDateString();
-
+            if (x === "role")
+                column.render = text => text.map(x => x.name).join(", ");
             return column;
         });
 

@@ -23,7 +23,7 @@ public class Credential {
     @Transient
     private String passwordAgain;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @RestResource(exported=false)
     @MapsId
     private User user;
