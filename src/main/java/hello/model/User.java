@@ -38,7 +38,7 @@ public class User {
     @Column(name = "register_on")
     private Date register_on;
 
-    @ManyToMany(cascade = { CascadeType.REFRESH })
+    @ManyToMany(cascade = { CascadeType.REFRESH },fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_users",
             joinColumns = { @JoinColumn(name = "id") },

@@ -16,6 +16,7 @@
 
 package hello;
 
+import hello.repository.CredentialRepository;
 import hello.repository.UserRepository;
 import org.junit.After;
 import org.junit.Test;
@@ -36,86 +37,78 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class UserTests {
+public class Credential {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Autowired
-	private UserRepository personRepository;
+	private CredentialRepository personRepository;
 
 
 	@Test
 	public void shouldReturnRepositoryIndex() throws Exception {
 
 		mockMvc.perform(get("/api/v1/")).andDo(print()).andExpect(status().isOk()).andExpect(
-				jsonPath("$._links.users").exists());
+				jsonPath("$._links.credentials").exists());
 	}
 
 	@Test
 	public void shouldCreateEntity() throws Exception {
 
-		mockMvc.perform(post("/api/v1/users").content(
-				"{\n" +
-						"    \"name\" : \"John\",\n" +
-						"    \"lastName\": \"Smith\",\n" +
-						"    \"age\": 25,\n" +
-						"    \"birthday\": \"1992-10-05\"\n" +
+		mockMvc.perform(post("/api/v1/credentials").content(
+				"{\"login\" : \"test\",\n" +
+						"      \"password\" : \"test\",\n" +
+						"      \"user\" : {\n" +
+						"        \"name\" : \"John\",\n" +
+						"        \"lastName\" : \"Smith 10th\",\n" +
+						"        \"age\" : 24,\n" +
+						"        \"birthday\" : \"2011-05-21\"\n" +
+						"      }\n" +
 						"}")).andExpect(
 						status().isCreated()).andExpect(
-								header().string("Location", containsString("users/")));
+								header().string("Location", containsString("credentials")));
 	}
 
-	@Test
-	public void shouldRetrieveEntity() throws Exception {
-
-		MvcResult mvcResult = mockMvc.perform(post("/api/v1/users").content(
-				"{\n" +
-						"    \"name\" : \"John\",\n" +
-						"    \"lastName\": \"Smith\",\n" +
-						"    \"age\": 25,\n" +
-						"    \"birthday\": \"1992-10-05\"\n" +
-						"}")).andExpect(
-						status().isCreated()).andReturn();
-
-		String location = mvcResult.getResponse().getHeader("Location");
-		mockMvc.perform(get(location)).andExpect(status().isOk()).andExpect(
-				jsonPath("$.name").value("John")).andExpect(
-						jsonPath("$.lastName").value("Smith"));
-	}
 
 	@Test
 	public void shouldPartiallyUpdateEntity() throws Exception {
 
-		MvcResult mvcResult = mockMvc.perform(post("/api/v1/users").content(
-				"{\n" +
-						"    \"name\" : \"John\",\n" +
-						"    \"lastName\": \"Smith\",\n" +
-						"    \"age\": 30,\n" +
-						"    \"birthday\": \"1992-10-05\"\n" +
+		MvcResult mvcResult = mockMvc.perform(post("/api/v1/credentials").content(
+				"{\"login\" : \"test\",\n" +
+						"      \"password\" : \"test\",\n" +
+						"      \"user\" : {\n" +
+						"        \"name\" : \"John\",\n" +
+						"        \"lastName\" : \"Smith 10th\",\n" +
+						"        \"age\" : 24,\n" +
+						"        \"birthday\" : \"2011-05-21\"\n" +
+						"      }\n" +
 						"}")).andExpect(
 						status().isCreated()).andReturn();
 
 		String location = mvcResult.getResponse().getHeader("Location");
 
 		mockMvc.perform(
-				patch(location).content("{\"name\": \"Bilbo Jr.\"}")).andExpect(
+				patch(location).content("{\"password\": \"Bilbo Jr.\"}")).andExpect(
 						status().isNoContent());
 
 		mockMvc.perform(get(location)).andExpect(status().isOk()).andExpect(
-				jsonPath("$.name").value("Bilbo Jr.")).andExpect(
-						jsonPath("$.lastName").value("Smith"));
+				jsonPath("$.password").value("Bilbo Jr.")).andExpect(
+						jsonPath("$.login").value("test"));
 	}
 
 	@Test
 	public void shouldDeleteEntity() throws Exception {
 
-		MvcResult mvcResult = mockMvc.perform(post("/api/v1/users").content(
-				"{\n" +
-						"    \"name\" : \"John\",\n" +
-						"    \"lastName\": \"Smith\",\n" +
-						"    \"age\": 30,\n" +
-						"    \"birthday\": \"1992-10-05\"\n" +
+		MvcResult mvcResult = mockMvc.perform(post("/api/v1/credentials").content(
+				"{\"login\" : \"test\",\n" +
+						"      \"password\" : \"test\",\n" +
+						"      \"user\" : {\n" +
+						"        \"name\" : \"John\",\n" +
+						"        \"lastName\" : \"Smith 10th\",\n" +
+						"        \"age\" : 24,\n" +
+						"        \"birthday\" : \"2011-05-21\"\n" +
+						"      }\n" +
 						"}")).andExpect(
 						status().isCreated()).andReturn();
 

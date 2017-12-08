@@ -1,4 +1,4 @@
-package hello.service;
+package hello.repository;
 
 import hello.model.ConcretePage;
 

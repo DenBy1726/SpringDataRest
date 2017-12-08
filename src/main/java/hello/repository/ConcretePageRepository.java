@@ -1,11 +1,10 @@
-package hello.service;
+package hello.repository;
 
 import java.util.List;
 
 import hello.model.ConcretePage;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 public interface ConcretePageRepository extends PagingAndSortingRepository<ConcretePage, Long>,ConcretePageRepositoryCustom {
 

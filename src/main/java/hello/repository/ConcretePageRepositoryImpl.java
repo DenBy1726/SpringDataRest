@@ -1,6 +1,7 @@
-package hello.service;
+package hello.repository;
 
 import hello.model.ConcretePage;
+import hello.repository.ConcretePageRepositoryCustom;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
