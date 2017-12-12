@@ -11,7 +11,11 @@ module.exports = {
         proxy: {
             '/api/v1/**': {
                 target: { host: 'localhost', port: 8080, protocol: 'http:' },
-                secure: false
+                secure: true
+            },
+            '/auth/v1/**': {
+                target: { host: 'localhost', port: 8080, protocol: 'http:' },
+                secure: true
             },
         },
 

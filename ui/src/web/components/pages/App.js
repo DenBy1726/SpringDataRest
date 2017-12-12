@@ -1,14 +1,15 @@
 import React from 'react'
 // import ReactDOM from 'react-dom'
 import {Table,Icon,Button,Popconfirm,Input} from "antd"
-import ModalDialog from "./ModalDialog"
+import ModalDialog from "../ModalDialog"
 import EditPage from "./EditPage"
-import actions from "../actions/concretePages/action"
+import actions from "../../actions/concretePages/action"
 let connect = require("react-redux").connect;
 import { Route, Switch, withRouter, NavLink, Link } from 'react-router-dom';
-import AppMenu from "./AppMenu";
+import AppMenu from "../AppMenu";
 import MainPage from "./MainPage";
 import AddPage from "./AddPage";
+import LoginPage from "./Login";
 // import ruRU from 'antd/lib/locale-provider/ru_RU';
 // import LocaleProvider from "antd"
 
@@ -35,14 +36,13 @@ class App extends React.Component{
         this.loadFromServer(8,"title","desc");
     }
 
-    shouldComponentUpdate(nextProps, nextState){
-        //если пришли не из домена работы со списком, то перезагружаем
+  /*  shouldComponentUpdate(nextProps, nextState){
         if(this.props.location.pathname.indexOf("list") === -1){
             this.loadFromServer(8,"title","desc");
             return false;
         }
         return true;
-    }
+    }*/
 
     loadFromServer(pageSize,sortBy,sortOrder) {
         //параметризируем сортировку и размер страниц
@@ -132,41 +132,34 @@ class App extends React.Component{
             data[i].key = i;
             data[i].age = getAge(data[i].birthday);
         }
+            return (
+                <div>
+                    <div style={{display: "flex", flexDirection: "row"}}>
+                        <Switch>
+                            <Route exact path="/list/">
+                                <div>
+                                    <Table columns={columns} dataSource={data} loading={!this.props.fetching}
+                                           pagination={this.props.page} onChange={this.onNavigate}
+                                    />
+                                </div>
+                            </Route>
+                            <Route path="/list/Edit/:id">
+                                <div style={{width:"100%"}}>
+                                    <EditPage attributes={this.props.attributes}
+                                              data={this.props.concretePages} OK={this.onUpdate} Cancel={this.onCancel}/>
+                                </div>
+                            </Route>
+                            <Route path="/list/Add/">
+                                <div style={{width:"100%"}}>
+                                    <AddPage attributes={this.props.attributes}
+                                              OK={this.onCreate} Cancel={this.onCancel}/>
+                                </div>
+                            </Route>
+                        </Switch>
+                    </div>
 
-        return (
-            <div>
-                <div style={{display: "flex", flexDirection: "row"}}>
-                    <Route path = "/">
-                        <AppMenu/>
-                    </Route>
-                    <Switch>
-                        <Route exact path="/" >
-                            <MainPage/>
-                        </Route>
-                        <Route exact path="/list/">
-                            <div>
-                                <Table columns={columns} dataSource={data} loading={!this.props.fetching}
-                                       pagination={this.props.page} onChange={this.onNavigate}
-                                />
-                            </div>
-                        </Route>
-                        <Route path="/list/Edit/:id">
-                            <div style={{width:"100%"}}>
-                                <EditPage attributes={this.props.attributes}
-                                          data={this.props.concretePages} OK={this.onUpdate} Cancel={this.onCancel}/>
-                            </div>
-                        </Route>
-                        <Route path="/list/Add/">
-                            <div style={{width:"100%"}}>
-                                <AddPage attributes={this.props.attributes}
-                                          OK={this.onCreate} Cancel={this.onCancel}/>
-                            </div>
-                        </Route>
-                    </Switch>
                 </div>
-
-            </div>
-        )
+            )
     }
 }
 

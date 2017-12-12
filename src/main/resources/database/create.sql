@@ -59,3 +59,10 @@ CREATE TABLE role_users
     REFERENCES users
     ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+create table persistent_logins (
+  username VARCHAR(64) NOT NULL ,
+  series VARCHAR(64) NOT NULL PRIMARY KEY,
+  token VARCHAR(64) NOT NULL ,
+  last_used TIMESTAMP NOT NULL
+);
