@@ -9,7 +9,7 @@ export default class AppMenu extends React.Component {
         return (
             <Menu mode="inline" style={{width:200}}>
                 <Menu.Item key="main">
-                    Главная страница
+                    Профиль
                     <NavLink to="/"/>
                 </Menu.Item>
 

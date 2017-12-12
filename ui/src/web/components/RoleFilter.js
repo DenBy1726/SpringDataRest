@@ -13,7 +13,7 @@ class RoleFilter extends React.Component{
     constructor(props){
         super(props);
 
-        this.state = {role : []};
+        this.state = {user : []};
     }
     componentWillMount(){
         client({
@@ -21,33 +21,42 @@ class RoleFilter extends React.Component{
             path: "/auth/v1/me",
             headers: {'Content-Type': 'application/json'}
         }).then(result=>{
-            this.setState({role:result.entity});
+                this.setState({user:result.entity});
         });
     }
 
 
-    render(){
-        if(this.state.role.length === 0 || this.state.role === undefined)
-        {
-            return <div>
-                <LoginPage history={this.props.history}/>
-            </div>;
+    render() {
+        if (this.state.user.role === undefined || this.state.user.role.length === 0 ) {
+            return <LoginPage history={this.props.history}/>
         }
-        else {
-            return <div style={{display: "flex", flexDirection: "row"}}>
-                    <Route path = "/">
-                        <AppMenu/>
-                    </Route>
-                <Switch>
-                    <Route exact path="/" >
-                        <MainPage/>
-                    </Route>
-                    <Route path="/list/">
-                        <App history={this.props.history} role={this.state.role}/>
-                    </Route>
-                </Switch>
-            </div>
-        }
+        let isAnonim = this.state.user.role.findIndex(x => x.name === "ANONIM");
+        let isModer = this.state.user.role.findIndex(x => x.name === "MODER");
+        let isUser = this.state.user.role.findIndex(x => x.name === "USER");
+        if(isAnonim !== -1)
+            return <LoginPage history={this.props.history}/>
+        let appMenu = isModer !== -1 ?
+            <Route path="/">
+                <AppMenu/>
+            </Route> :
+            null;
+        let app = isModer !== -1 ?
+            <Route path="/list">
+                <App history={this.props.history} role={this.state.role}/>
+            </Route>:
+            <Redirect to={"/"}/>;
+        let main = isUser !== -1 ?
+            <Route exact path="/">
+                <MainPage/>
+            </Route> :
+            null;
+        return <div style={{display: "flex", flexDirection: "row"}}>
+            {appMenu}
+            <Switch>
+                {main}
+                {app}
+            </Switch>
+        </div>
     }
 
 }
