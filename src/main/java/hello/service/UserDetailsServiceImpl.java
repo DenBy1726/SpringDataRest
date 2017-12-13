@@ -23,10 +23,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         Credential user = userRepository.findByLogin(username);
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-            for (Role role : user.getUser().getRole()) {
-                grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
-            }
+        Set<GrantedAuthority> grantedAuthorities = createGrantedAuthority(user.getUser().getRole());
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
+    }
+
+    public static Set<GrantedAuthority> createGrantedAuthority(Set<Role> roles){
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        for (Role role : roles) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
+        return grantedAuthorities;
     }
 }

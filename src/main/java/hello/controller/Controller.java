@@ -3,20 +3,22 @@ package hello.controller;
 import hello.model.Credential;
 import hello.model.Role;
 import hello.repository.CredentialRepository;
-import hello.repository.UserRepository;
+import hello.repository.RoleRepository;
+import hello.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @RestController
 @RequestMapping(value="/auth/v1")
@@ -25,6 +27,13 @@ public class Controller {
 
     @Autowired
     CredentialRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    @Qualifier("authenticationManager")
+    AuthenticationManager authenticationManager;
 
 
     @RequestMapping(value="/me",method = RequestMethod.GET)
@@ -49,6 +58,46 @@ public class Controller {
         Credential userInfo = userRepository.findByLogin(name);
         return userInfo.getUser();
     }
+
+    @RequestMapping(value="/registration",method = RequestMethod.POST)
+    @ResponseBody
+    public Boolean registration(@RequestBody Credential credential,HttpServletRequest request) throws Exception {
+        if(credential.getPassword().equals(credential.getPasswordAgain()) == false){
+            throw new Exception("passwords must be equals");
+        }
+        if(userRepository.findByLogin(credential.getLogin()) != null)
+            throw new Exception("user already exists");
+        Set<Role> roles = new HashSet<>();
+        Role role = roleRepository.findByName("USER");
+        roles.add(role);
+        credential.getUser().setRole(roles);
+        userRepository.save(credential);
+
+        Credential newUser = userRepository.findByLogin(credential.getLogin());
+        if(newUser == null)
+            throw new Exception("user didn't save");
+
+        User user = new User(newUser.getLogin(),newUser.getPassword(),
+                UserDetailsServiceImpl.createGrantedAuthority(newUser.getUser().getRole()));
+        doAutoLogin(user,request);
+        return true;
+    }
+
+    private void doAutoLogin(User user,HttpServletRequest request) {
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUsername()
+                , user.getPassword(),user.getAuthorities());
+        HttpSession session = request.getSession();
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);// authenticates the token
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY
+                , SecurityContextHolder.getContext());// creates context for that session.
+//set necessary details in session
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("authorities", token.getAuthorities());
+    }
+
+
 
 
 

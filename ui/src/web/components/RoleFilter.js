@@ -8,6 +8,7 @@ import LoginPage from "./pages/Login"
 import AppMenu from "./AppMenu";
 import MainPage from "./pages/MainPage";
 import Spin from "antd/es/spin/index";
+import WrappedRegistrationForm from "./pages/RegistrationForm"
 
 
 class RoleFilter extends React.Component{
@@ -31,41 +32,58 @@ class RoleFilter extends React.Component{
 
 
     render() {
+        let content;
         if(this.loading === true){
-            return <Spin loading={this.loading}/>
+            content = <Spin loading={this.loading}/>
         }
-        if (this.state.user.role === undefined || this.state.user.role.length === 0 ) {
-            return <LoginPage history={this.props.history}/>
+        else {
+            if (this.state.user.role === undefined || this.state.user.role.length === 0) {
+                content = <LoginPage history={this.props.history}/>
+            }
+            else {
+                let isAnonim = this.state.user.role.findIndex(x => x.name === "ANONIM");
+                let isModer = this.state.user.role.findIndex(x => x.name === "MODER");
+                let isUser = this.state.user.role.findIndex(x => x.name === "USER");
+                if (isAnonim !== -1)
+                    content = <LoginPage history={this.props.history}/>
+                else {
+                    let appMenu = isModer !== -1 ?
+                        <Route path="/">
+                            <AppMenu/>
+                        </Route> :
+                        null;
+                    let app = isModer !== -1 ?
+                        <Route path="/list">
+                            <App history={this.props.history} role={this.state.role}/>
+                        </Route> :
+                        <Redirect to={"/"}/>;
+                    let main = isUser !== -1 ?
+                        <Route exact path="/">
+                            <MainPage/>
+                        </Route> :
+                        null;
+                    return <div style={{display: "flex", flexDirection: "row"}}>
+                        {appMenu}
+                        <div style={{flexGrow: "1"}}>
+                            <Switch>
+                                {main}
+                                {app}
+                            </Switch>
+                        </div>
+                    </div>
+                }
+            }
         }
-        let isAnonim = this.state.user.role.findIndex(x => x.name === "ANONIM");
-        let isModer = this.state.user.role.findIndex(x => x.name === "MODER");
-        let isUser = this.state.user.role.findIndex(x => x.name === "USER");
-        if(isAnonim !== -1)
-            return <LoginPage history={this.props.history}/>
-        let appMenu = isModer !== -1 ?
-            <Route path="/">
-                <AppMenu/>
-            </Route> :
-            null;
-        let app = isModer !== -1 ?
-            <Route path="/list">
-                <App history={this.props.history} role={this.state.role}/>
-            </Route>:
-            <Redirect to={"/"}/>;
-        let main = isUser !== -1 ?
-            <Route exact path="/">
-                <MainPage/>
-            </Route> :
-            null;
-        return <div style={{display: "flex", flexDirection: "row"}}>
-            {appMenu}
-            <div style={{flexGrow: "1"}}>
-                <Switch>
-                    {main}
-                    {app}
-                </Switch>
-            </div>
-        </div>
+        return <div>
+            <Switch>
+                <Route path="/login">
+                    {content}
+                </Route>
+                <Route path="/registration">
+                    <WrappedRegistrationForm/>
+                </Route>
+            </Switch>
+        </div>;
     }
 
 }

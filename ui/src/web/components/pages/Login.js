@@ -5,6 +5,7 @@ import Checkbox from "antd/es/checkbox/Checkbox";
 import Button from "antd/es/button/button";
 import withRouter from "react-router-dom/es/withRouter";
 import client from "../../client"
+import Link from "react-router-dom/es/Link";
 const FormItem = Form.Item;
 class LoginForm extends React.Component{
 
@@ -46,6 +47,7 @@ class LoginForm extends React.Component{
                             <Checkbox name={"remember-me-parameter"}>Remember me</Checkbox>
                             <br/>
                             <Button type="primary" htmlType="submit">Log In</Button>
+                            <Link to={"registration"}>Register</Link>
                 </form>
             </div>
 
