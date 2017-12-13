@@ -95,11 +95,16 @@ class App extends React.Component{
                 key: x.id,
                 sorter: true
             };
+            switch(x)
+            {
+                case "birthday":
+                    column.render = text => text.toLocaleDateString();
+                    break;
+                case "role":
+                    column.render = text => text.map(x => x.name).join(", ");
+                    break;
+            }
 
-            if (x === "birthday")
-                column.render = text => text.toLocaleDateString();
-            if (x === "role")
-                column.render = text => text.map(x => x.name).join(", ");
             return column;
         });
 
@@ -107,7 +112,7 @@ class App extends React.Component{
             {
                 title: '',
                 dataIndex: 'operation',
-                width: '20%',
+                width: '10%',
                 render: (text, record) => {
                     const deleteButton =
                             <Popconfirm title="Вы уверены что хотите удалить запись?" okText="Да" cancelText="Нет" onConfirm={() => this.onDelete(record)}>
@@ -133,8 +138,6 @@ class App extends React.Component{
             data[i].age = getAge(data[i].birthday);
         }
             return (
-                <div>
-                    <div style={{display: "flex", flexDirection: "row"}}>
                         <Switch>
                             <Route exact path="/list/">
                                 <div>
@@ -144,21 +147,18 @@ class App extends React.Component{
                                 </div>
                             </Route>
                             <Route path="/list/Edit/:id">
-                                <div style={{width:"100%"}}>
+                                <div className={"formContainer"}>
                                     <EditPage attributes={this.props.attributes}
                                               data={this.props.concretePages} OK={this.onUpdate} Cancel={this.onCancel}/>
                                 </div>
                             </Route>
                             <Route path="/list/Add/">
-                                <div style={{width:"100%"}}>
+                                <div className={"formContainer"}>
                                     <AddPage attributes={this.props.attributes}
                                               OK={this.onCreate} Cancel={this.onCancel}/>
                                 </div>
                             </Route>
                         </Switch>
-                    </div>
-
-                </div>
             )
     }
 }

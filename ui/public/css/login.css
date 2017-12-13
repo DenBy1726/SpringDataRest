@@ -1,5 +1,11 @@
 .login-form {
-    max-width: 300px;
+    width:50%;
+    margin: 10px 0 10px 0;
+    padding: 10px;
+}
+
+.formContainer{
+    width:50%;
     margin: 10px 0 10px 0;
     padding: 10px;
 }

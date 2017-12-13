@@ -7,6 +7,7 @@ import Redirect from "react-router-dom/es/Redirect";
 import LoginPage from "./pages/Login"
 import AppMenu from "./AppMenu";
 import MainPage from "./pages/MainPage";
+import Spin from "antd/es/spin/index";
 
 
 class RoleFilter extends React.Component{
@@ -14,19 +15,25 @@ class RoleFilter extends React.Component{
         super(props);
 
         this.state = {user : []};
+        this.loading = {};
     }
     componentWillMount(){
+        this.loading = true;
         client({
             method: 'GET',
             path: "/auth/v1/me",
-            headers: {'Content-Type': 'application/json'}
+            headers: {'Content-Type': 'application/json'},
         }).then(result=>{
+                this.loading = false;
                 this.setState({user:result.entity});
         });
     }
 
 
     render() {
+        if(this.loading === true){
+            return <Spin loading={this.loading}/>
+        }
         if (this.state.user.role === undefined || this.state.user.role.length === 0 ) {
             return <LoginPage history={this.props.history}/>
         }
@@ -52,10 +59,12 @@ class RoleFilter extends React.Component{
             null;
         return <div style={{display: "flex", flexDirection: "row"}}>
             {appMenu}
-            <Switch>
-                {main}
-                {app}
-            </Switch>
+            <div style={{flexGrow: "1"}}>
+                <Switch>
+                    {main}
+                    {app}
+                </Switch>
+            </div>
         </div>
     }
 
