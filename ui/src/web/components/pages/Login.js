@@ -32,17 +32,23 @@ class LoginForm extends React.Component{
     render(){
    //     const { getFieldDecorator } = this.props.form;
         return (
-            <form name='loginForm'
-                  action="/auth/v1/login" method='POST'>
-                        <label>User:</label>
-                        <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                               placeholder="Login" type='text' name='username' />
-                        <label>Password:</label>
-                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                               placeholder="Password" type='password' name='password' />
-                        <Checkbox name={"remember-me-parameter"}>Remember me</Checkbox>
-                        <Input type="submit" value="Log In"/>
-            </form>
+            <div style={{display:"flex",alignItems: "center",justifyContent: "center"}}>
+                <form name='loginForm'
+                      action="/auth/v1/login" method='POST' className={"login-form"} >
+                            <label>User:</label>
+                            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                   placeholder="Login" type='text' name='username' />
+                            <br/>
+                            <label>Password:</label>
+                            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                   placeholder="Password" type='password' name='password' />
+                            <br/>
+                            <Checkbox name={"remember-me-parameter"}>Remember me</Checkbox>
+                            <br/>
+                            <Button type="primary" htmlType="submit">Log In</Button>
+                </form>
+            </div>
+
         );
     }
 }
