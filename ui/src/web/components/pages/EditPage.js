@@ -45,7 +45,6 @@ class EditForm extends React.Component{
                 birthday: fieldsValue['Birthday'].format('YYYY-MM-DD'),
                 id: this.editing.id
             };
-            values.age = new Date().getYear() - new Date(values.birthday).getYear();
             this.props.OK(this.editing,values);
             this.props.history.goBack();
         });

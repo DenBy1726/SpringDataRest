@@ -42,7 +42,6 @@ class AddForm extends React.Component{
                 birthday: fieldsValue['Birthday'].format('YYYY-MM-DD'),
                 register_on: new Date().toISOString().split('T')[0]
             };
-            values.age = new Date().getYear() - new Date(values.birthday).getYear();
             this.props.OK(values);
             this.props.history.goBack();
         });

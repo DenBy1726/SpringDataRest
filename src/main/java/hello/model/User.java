@@ -25,9 +25,6 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "age")
-    private long age;
-
     @Column(name = "birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
@@ -87,14 +84,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public long getAge() {
-        return age;
-    }
-
-    public void setAge(long age) {
-        this.age = age;
     }
 
     public Date getBirthday() {
