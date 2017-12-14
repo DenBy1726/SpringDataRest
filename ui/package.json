@@ -3,11 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build" : "webpack",
-    "run" : "webpack-dev-server --hot"
-  },
-  "theme": {
-    "primary-color": "#1DA57A"
+    "build": "webpack",
+    "run": "webpack-dev-server --hot"
   },
   "dependencies": {
     "react": "15.0.0",
@@ -23,23 +20,28 @@
     "babel-preset-stage-0": "^6.16.0",
     "rest": "^1.3.1",
     "redux-thunk": "^2.2.0",
-    "antd" : "^2.13.10",
-    "antd-init" : "^2.0.6",
-    "css-loader" : "^0.28.7",
+    "antd": "^2.13.10",
+    "antd-init": "^2.0.6",
+    "css-loader": "^0.28.7",
     "style-loader": "^0.19.0",
-
-    "history" : "^4.7.2"
+    "history": "^4.7.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-jest": "^21.2.0",
     "babel-loader": "7.1.2",
+    "babel-plugin-import": "^1.6.3",
+    "css-loader": "^0.28.7",
     "enzyme": "^2.9.1",
     "jest": "^18.1.0",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "less-vars-to-js": "^1.2.1",
     "react-addons-test-utils": "15.3.2",
     "react-test-renderer": "^15.4.1",
     "redux-mock-store": "^1.3.0",
+    "style-loader": "^0.19.0",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
   }

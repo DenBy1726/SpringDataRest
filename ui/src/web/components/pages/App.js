@@ -13,7 +13,7 @@ import LoginPage from "./Login";
 // import ruRU from 'antd/lib/locale-provider/ru_RU';
 // import LocaleProvider from "antd"
 
-require('antd/dist/antd.css');
+require('antd/lib/date-picker/style/index.css');
 
 
 class App extends React.Component{
@@ -138,6 +138,7 @@ class App extends React.Component{
             data[i].age = getAge(data[i].birthday);
         }
             return (
+
                         <Switch>
                             <Route exact path="/list/">
                                 <div>

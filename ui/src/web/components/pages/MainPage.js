@@ -10,7 +10,7 @@ import Input from "antd/es/input/Input";
 class MainPage extends React.Component{
     render(){
         return<div className={"main"}>
-            <h1>Hello, {this.props.user.name + " " + this.props.user.lastName}</h1>
+            <h1 className={"center"}>Hello, {this.props.user.name + " " + this.props.user.lastName}</h1>
             <form action="/auth/v1/logout" method="post">
                 <Input class="btn btn-danger center-block" type="submit" value="Logout" id={"logout"}/>
             </form>

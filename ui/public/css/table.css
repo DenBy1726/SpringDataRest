@@ -16,16 +16,8 @@ table {
     position: relative;
     table-layout: fixed;
 }
-table * {
-    position: relative;
-}
-
 tr:hover{
     background-color: #eeeeee;
-}
-
-table > thead > tr:first-child:hover{
-    background-color: #FFED66;
 }
 
 table > thead > tr > th:hover{
@@ -33,9 +25,6 @@ table > thead > tr > th:hover{
     cursor: pointer;
 }
 
-table td, table th {
-    padding-left: 8px;
-}
 table thead tr {
     height: 60px;
     background: #FFED86;
@@ -46,21 +35,6 @@ table tbody tr {
     border-bottom: 1px solid #E3F1D5;
 }
 
-table tbody tr:last-child {
-    border: 0;
-}
-table td, table th {
-    text-align: left;
-}
-table td.l, table th.l {
-    text-align: right;
-}
-table td.c, table th.c {
-    text-align: center;
-}
-table td.r, table th.r {
-    text-align: center;
-}
 
 @media screen and (max-width: 35.5em) {
     table {
@@ -90,94 +64,8 @@ table td.r, table th.r {
         left: 10px;
         top: 0;
     }
-    table tbody tr td:nth-child(1):before {
-        content: "Title";
-    }
-    table tbody tr td:nth-child(2):before {
-        content: "Category";
-    }
-}
-body {
-    background: #9BC86A;
-    font: 400 14px 'Calibri','Arial';
-    padding: 20px;
 }
 
-blockquote {
-    color: white;
-    text-align: center;
+.ant-table-content {
+    margin-top: -10px
 }
-input.field {
-    width: 90%;
-    border-radius: 15px;
-    outline:none;
-}
-
-.modalDialog {
-    position: fixed;
-    font-family: Arial, Helvetica, sans-serif;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 99999;
-    opacity:0;
-    -webkit-transition: opacity 400ms ease-in;
-    -moz-transition: opacity 400ms ease-in;
-    transition: opacity 400ms ease-in;
-    pointer-events: none;
-}
-
-.modalDialog:target {
-    opacity:1;
-    pointer-events: auto;
-}
-
-.applyDialog {
-    position: fixed;
-    font-family: Arial, Helvetica, sans-serif;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0,0,0,0.8);
-    z-index: 99999;
-    opacity:1;
-    -webkit-transition: opacity 400ms ease-in;
-    -moz-transition: opacity 400ms ease-in;
-    transition: opacity 400ms ease-in;
-    pointer-events: auto;
-}
-
-.applyDialog > div {
-    width: 400px;
-    position: relative;
-    margin: 10% auto;
-    padding: 5px 20px 13px 20px;
-    border-radius: 10px;
-    background: #fff;
-    background: -moz-linear-gradient(#fff, #999);
-    background: -webkit-linear-gradient(#fff, #999);
-    background: -o-linear-gradient(#fff, #999);
-}
-
-.modalDialog > div {
-    width: 400px;
-    position: relative;
-    margin: 10% auto;
-    padding: 5px 20px 13px 20px;
-    border-radius: 10px;
-    background: #fff;
-    background: -moz-linear-gradient(#fff, #999);
-    background: -webkit-linear-gradient(#fff, #999);
-    background: -o-linear-gradient(#fff, #999);
-}
-
-
-
-
-#addBar{
-    height:20px;
-}
-

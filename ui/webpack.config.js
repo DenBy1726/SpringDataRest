@@ -1,4 +1,7 @@
-let path = require('path');
+const path = require('path');
+const fs  = require('fs');
+const lessToJs = require('less-vars-to-js');
+const themeVariables = lessToJs(fs.readFileSync(path.join(__dirname, './ant-theme-vars.less'), 'utf8'));
 
 module.exports = {
     entry: "./src/web/app.js", // входная точка - исходный файл
@@ -39,11 +42,25 @@ module.exports = {
                 exclude: /(node_modules)/,  // исключаем из обработки папку node_modules
                 loader: "babel-loader",   // определяем загрузчик
                 options:{
-                    presets:["env", "react"]    // используемые плагины
-                }
+                    presets:["env", "react"],    // используемые плагины
+                    plugins: [
+                        ['import', { libraryName: "antd", style: true }]
+                    ]
+                },
             },
-            { test: /\.css$/, loader: "style-loader!css-loader" }
+            { test: /\.css$/, loader: "style-loader!css-loader" },
+            { test: /\.less$/, use: [
+                {loader: "style-loader"},
+                {loader: "css-loader"},
+                {loader: "less-loader",
+                    options: {
+                        modifyVars: themeVariables
+                    }
+                }
+                ]
+            }
         ]
+
     },
     devtool: 'cheap-module-source-map'
 }

@@ -19,10 +19,6 @@ tr:hover .delButton{
     display: block !important;
 }
 
-.editable-add-btn {
-    margin-bottom: 8px;
-}
-
 .ant-btn{
     margin-left: 20px;
 }
