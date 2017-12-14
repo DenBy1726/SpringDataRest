@@ -38,14 +38,23 @@ class RoleFilter extends React.Component{
         }
         else {
             if (this.state.user.role === undefined || this.state.user.role.length === 0) {
-                content = <LoginPage history={this.props.history}/>
+                content = <LoginPage history={this.props.history}/>;
+                if(this.props.history.location.pathname === "/")
+                {
+                    this.props.history.push("/login");
+                }
             }
             else {
                 let isAnonim = this.state.user.role.findIndex(x => x.name === "ANONIM");
                 let isModer = this.state.user.role.findIndex(x => x.name === "MODER");
                 let isUser = this.state.user.role.findIndex(x => x.name === "USER");
-                if (isAnonim !== -1)
-                    content = <LoginPage history={this.props.history}/>
+                if (isAnonim !== -1) {
+                    content = <LoginPage history={this.props.history}/>;
+                    if(this.props.history.location.pathname === "/")
+                    {
+                        this.props.history.push("/login");
+                    }
+                }
                 else {
                     let appMenu = isModer !== -1 ?
                         <Route path="/">
@@ -59,7 +68,7 @@ class RoleFilter extends React.Component{
                         <Redirect to={"/"}/>;
                     let main = isUser !== -1 ?
                         <Route exact path="/">
-                            <MainPage/>
+                            <MainPage user={this.state.user}/>
                         </Route> :
                         null;
                     return <div style={{display: "flex", flexDirection: "row"}}>
@@ -74,8 +83,10 @@ class RoleFilter extends React.Component{
                 }
             }
         }
+
         return <div>
             <Switch>
+
                 <Route path="/login">
                     {content}
                 </Route>

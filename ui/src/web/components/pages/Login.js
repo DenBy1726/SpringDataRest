@@ -47,7 +47,9 @@ class LoginForm extends React.Component{
                             <Checkbox name={"remember-me-parameter"}>Remember me</Checkbox>
                             <br/>
                             <Button type="primary" htmlType="submit">Log In</Button>
-                            <Link to={"registration"}>Register</Link>
+                            <Button type="primary">
+                                <Link to={"registration"}>Register</Link>
+                            </Button>
                 </form>
             </div>
 

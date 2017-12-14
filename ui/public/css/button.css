@@ -26,3 +26,10 @@ tr:hover .delButton{
 .ant-btn{
     margin-left: 20px;
 }
+
+#logout:hover{
+    color: white;
+    background: red;
+    border-color: white;
+    right: 0;
+}

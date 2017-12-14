@@ -88,7 +88,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login?logout")
                 // делаем не валидной текущую сессию
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
 
         //remember me configuration
         http.rememberMe().

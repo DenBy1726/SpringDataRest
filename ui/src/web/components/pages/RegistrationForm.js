@@ -174,6 +174,7 @@ class RegistrationForm extends React.Component {
                     )}
                 </FormItem>
                 <FormItem {...tailFormItemLayout}>
+                    <Button type="primary" onClick={()=>this.props.history.goBack()}>Go Back</Button>
                     <Button type="primary" htmlType="submit">Register</Button>
                 </FormItem>
             </Form>
