@@ -22,8 +22,12 @@ import org.junit.runner.RunWith;
 import hello.repository.ConcretePageRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -36,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ApplicationTests {
+public class ConcretePagesTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -44,16 +48,15 @@ public class ApplicationTests {
 	@Autowired
 	private ConcretePageRepository personRepository;
 
-
-
 	@Test
+	@WithMockUser(username="admin",authorities={"MODER"})
 	public void shouldReturnRepositoryIndex() throws Exception {
-
 		mockMvc.perform(get("/api/v1/")).andDo(print()).andExpect(status().isOk()).andExpect(
 				jsonPath("$._links.concretePages").exists());
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"USER"})
 	public void shouldCreateEntity() throws Exception {
 
 		mockMvc.perform(post("/api/v1/concretePages").content(
@@ -63,6 +66,7 @@ public class ApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"USER"})
 	public void shouldRetrieveEntity() throws Exception {
 
 		MvcResult mvcResult = mockMvc.perform(post("/api/v1/concretePages").content(
@@ -76,6 +80,7 @@ public class ApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"USER"})
 	public void shouldQueryEntity() throws Exception {
 
 		mockMvc.perform(post("/api/v1/concretePages").content(
@@ -90,6 +95,7 @@ public class ApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"USER"})
 	public void shouldUpdateEntity() throws Exception {
 
 		MvcResult mvcResult = mockMvc.perform(post("/api/v1/concretePages").content(
@@ -108,6 +114,7 @@ public class ApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"USER"})
 	public void shouldPartiallyUpdateEntity() throws Exception {
 
 		MvcResult mvcResult = mockMvc.perform(post("/api/v1/concretePages").content(
@@ -126,6 +133,7 @@ public class ApplicationTests {
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"USER"})
 	public void shouldDeleteEntity() throws Exception {
 
 		MvcResult mvcResult = mockMvc.perform(post("/api/v1/concretePages").content(

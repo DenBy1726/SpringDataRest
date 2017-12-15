@@ -51,11 +51,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/auth/v1/me").permitAll()
-                .antMatchers("/api/v1/concretePages").hasAnyAuthority("USER","MODER")
-                .antMatchers("/api/v1/users").hasAuthority("MODER")
-                .anyRequest().authenticated().and()
-                .exceptionHandling().accessDeniedPage("/403");
+                .antMatchers("/auth/v1/me/**").permitAll()
+                .antMatchers("/api/v1/concretePages/**").hasAnyAuthority("USER","MODER")
+                .antMatchers("/api/v1/users/**").hasAuthority("MODER")
+                .antMatchers("/api/v1/").hasAuthority("MODER")
+                .antMatchers("/api/v1/profile/**").hasAuthority("MODER")
+                .antMatchers("/api/v1/credentials/**").hasAuthority("ADMIN")
+                .anyRequest().authenticated();
 
         // включаем защиту от CSRF атак
         http.csrf()

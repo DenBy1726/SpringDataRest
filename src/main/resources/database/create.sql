@@ -27,7 +27,6 @@ CREATE TABLE users
     PRIMARY KEY,
   name        VARCHAR(20)             NOT NULL,
   last_name   VARCHAR(20)             NOT NULL,
-  age         INTEGER                 NOT NULL,
   birthday    DATE                    NOT NULL,
   register_on TIMESTAMP DEFAULT now() NOT NULL
 );

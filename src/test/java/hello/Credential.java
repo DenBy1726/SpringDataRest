@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -47,6 +48,7 @@ public class Credential {
 
 
 	@Test
+	@WithMockUser(username="admin",authorities={"MODER"})
 	public void shouldReturnRepositoryIndex() throws Exception {
 
 		mockMvc.perform(get("/api/v1/")).andDo(print()).andExpect(status().isOk()).andExpect(
@@ -54,6 +56,7 @@ public class Credential {
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"ADMIN"})
 	public void shouldCreateEntity() throws Exception {
 
 		mockMvc.perform(post("/api/v1/credentials").content(
@@ -62,7 +65,6 @@ public class Credential {
 						"      \"user\" : {\n" +
 						"        \"name\" : \"John\",\n" +
 						"        \"lastName\" : \"Smith 10th\",\n" +
-						"        \"age\" : 24,\n" +
 						"        \"birthday\" : \"2011-05-21\"\n" +
 						"      }\n" +
 						"}")).andExpect(
@@ -72,6 +74,7 @@ public class Credential {
 
 
 	@Test
+	@WithMockUser(username="admin",authorities={"ADMIN"})
 	public void shouldPartiallyUpdateEntity() throws Exception {
 
 		MvcResult mvcResult = mockMvc.perform(post("/api/v1/credentials").content(
@@ -98,6 +101,7 @@ public class Credential {
 	}
 
 	@Test
+	@WithMockUser(username="admin",authorities={"ADMIN"})
 	public void shouldDeleteEntity() throws Exception {
 
 		MvcResult mvcResult = mockMvc.perform(post("/api/v1/credentials").content(
