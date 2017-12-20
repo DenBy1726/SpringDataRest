@@ -4,7 +4,7 @@ import Icon from "antd/es/icon/index";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import Button from "antd/es/button/button";
 import withRouter from "react-router-dom/es/withRouter";
-import client from "../../client"
+import client from "../../api/client"
 import Link from "react-router-dom/es/Link";
 const FormItem = Form.Item;
 class LoginForm extends React.Component{

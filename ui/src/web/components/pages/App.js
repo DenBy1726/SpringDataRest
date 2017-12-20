@@ -10,6 +10,7 @@ import AppMenu from "../AppMenu";
 import MainPage from "./MainPage";
 import AddPage from "./AddPage";
 import LoginPage from "./Login";
+import * as redux from "redux";
 // import ruRU from 'antd/lib/locale-provider/ru_RU';
 // import LocaleProvider from "antd"
 
@@ -28,10 +29,11 @@ class App extends React.Component{
         this.onCreate = this.onCreate.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.onCancel = this.onCancel.bind(this);
+
     }
 
 
-    componentDidMount(){
+    componentWillMount(){
         //грузим данные с сервера, устанавливаем размер страницы
         this.loadFromServer(8,"title","desc");
     }

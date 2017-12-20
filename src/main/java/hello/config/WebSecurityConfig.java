@@ -70,8 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.addFilterAfter(
-                new FilterToGetTimeOut(), BasicAuthenticationFilter.class);
         http
                 .authorizeRequests()
                 .antMatchers("/auth/v1/me/**").permitAll()
@@ -125,7 +123,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.rememberMe().
                 rememberMeParameter("remember-me-parameter").
                 rememberMeCookieName("remember-me-cookie").
-                tokenValiditySeconds(30)
+                tokenValiditySeconds(64000)
                 .tokenRepository(persistentTokenRepository());
 
     }

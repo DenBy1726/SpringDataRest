@@ -4,7 +4,7 @@ const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 import React from "react"
 import DatePicker from "antd/es/date-picker/index";
-import client from "../../client"
+import client from "../../api/client"
 import withRouter from "react-router-dom/es/withRouter";
 
 class RegistrationForm extends React.Component {

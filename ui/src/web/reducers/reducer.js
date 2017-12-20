@@ -1,5 +1,6 @@
+const initialState = {data: [], attributes: [], page: {}, links: {}, fetching:false};
 
-let concretePages = function(state, action) {
+let concretePages = function(state = initialState, action) {
     switch (action.type) {
         case "PAGE_ADDING":
             console.log("data PAGE_ADDING");
@@ -28,12 +29,12 @@ let concretePages = function(state, action) {
                         x.register_on = new Date(x.register_on);
                     });
                     action.result.attributes = action.result.attributes.sort((x,y)=> x < y);
-                    return action.result;
+                    action = {...state,...action.result};
+                    return action;
             }
             return state;
         default:
-            const initialState = {data: [], attributes: [], page: {}, links: {}, fetching:false};
-            return initialState;
+            return state;
     }
 };
 

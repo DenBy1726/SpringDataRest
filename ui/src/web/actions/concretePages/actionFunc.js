@@ -1,5 +1,5 @@
-import follow from '../../follow'
-import client from '../../client'
+import follow from '../../api/follow'
+import request from '../../api/request'
 import actions from './actionEvents'
 
 const root = "/api/v1/";
@@ -8,8 +8,9 @@ const root = "/api/v1/";
 export function loadWithSchema(page,sorter) {
     return function (dispatch) {
         return loadSchema()
-            .then(schema=>{
-                dispatch(load(Object.keys(schema.entity.properties).filter(x => x !== 'id' && x !=='register_on'),page,sorter));
+            .done(schema=>{
+                if(schema !== undefined)
+                    dispatch(load(Object.keys(schema.entity.properties).filter(x => x !== 'id' && x !=='register_on'),page,sorter));
             })
     }
 }
@@ -25,14 +26,15 @@ export function load(attributes,page,sorter){
         dispatch(actions.pageLoading());
         return loadData(params)
             .done(collections=>{
-                dispatch(actions.pageLoaded(collections, attributes, params))
+                if(collections !== undefined)
+                    dispatch(actions.pageLoaded(collections, attributes, params))
             })
     } 
 }
 
 //загрузка схемы
 function loadSchema(){
-    return client({
+    return request({
         method: 'GET',
         path: root + "profile/users",
         headers: {'Accept': 'application/schema+json'}
@@ -41,7 +43,7 @@ function loadSchema(){
 
 //загрузка данных
 function loadData(params) {
-    return follow(client, root, [
+    return follow(request, root, [
         {rel: 'users', params: params}]
     );
 }
@@ -71,7 +73,7 @@ export function create(newPage,attributes,page,sorter){
     //отправляем на сервер данное
     return function (dispatch) {
         dispatch(actions.pageAdding());
-        client({
+        request({
             method: 'POST',
             path: root + "users",
             entity: newPage,
@@ -88,7 +90,7 @@ export function create(newPage,attributes,page,sorter){
 export function Delete(url,attributes,page,sorter){
     return function (dispatch) {
         dispatch(actions.pageDeleting());
-        client({method: 'DELETE', path: url}).done(response => {
+        request({method: 'DELETE', path: url}).done(response => {
                 dispatch(load(attributes,page,sorter));
         });
     }
@@ -98,7 +100,7 @@ export function Delete(url,attributes,page,sorter){
 export function update(page,updatedPage,attributes,pageParam,sorter) {
     return function (dispatch) {
         actions.pageUpdating();
-        client({
+        request({
             method: 'PATCH',
             path: page._links.self.href,
             entity: updatedPage,

@@ -5,6 +5,7 @@ import Table from './components/obsolete/Table'
 let redux = require("redux");
 let Provider = require("react-redux").Provider;
 import concretePages from "./reducers/reducer.js"
+import roleReducer from "./reducers/roleReducer.js"
 import thunk from 'redux-thunk' // <-- добавили redux-thunk
 import {applyMiddleware} from "redux"
 import App from "./components/pages/App"
@@ -24,11 +25,14 @@ import LoginPage from "./components/pages/Login";
 
 const combineReducer = redux.combineReducers({
     concretePages: concretePages,
-    routing: routerReducer
+    routing: routerReducer,
+    role: roleReducer
 });
 
 //связь хранилища с функцией обновления состояния.
 let store = redux.createStore(combineReducer,applyMiddleware(thunk));
+
+window.store = store;
 
 const history = syncHistoryWithStore(createBrowserHistory(), store);
 

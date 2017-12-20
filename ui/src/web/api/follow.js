@@ -1,7 +1,11 @@
+import handler from "../asyncErrorHandler"
+
 module.exports = function follow(api, rootPath, relArray) {
     let root = api({
         method: 'GET',
         path: rootPath
+    }).then(result=>result,e=>{
+        handler(e);
     });
 
     return relArray.reduce(function(root, arrayItem) {
@@ -23,12 +27,16 @@ module.exports = function follow(api, rootPath, relArray) {
                 return api({
                     method: 'GET',
                     path: response.entity._links[rel].href
+                }).then(result=>result,e=>{
+                    handler(e);
                 });
             } else {
                 return api({
                     method: 'GET',
                     path: response.entity._links[rel].href,
                     params: arrayItem.params
+                }).then(result=>result,e=>{
+                    handler(e);
                 });
             }
         });

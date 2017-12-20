@@ -1,5 +1,5 @@
 import React from "react"
-import client from "../client"
+import actions from "../actions/role/action"
 import App from "./pages/App";
 import withRouter from "react-router-dom/es/withRouter";
 import {Route,Switch} from "react-router-dom";
@@ -9,53 +9,26 @@ import AppMenu from "./AppMenu";
 import MainPage from "./pages/MainPage";
 import Spin from "antd/es/spin/index";
 import WrappedRegistrationForm from "./pages/RegistrationForm"
+import {connect} from "react-redux";
+import {createBrowserHistory} from 'history';
 
 class RoleFilter extends React.Component{
     constructor(props){
         super(props);
-
-        this.state = {user : []};
-        this.loading = {};
-    }
-
-    componentDidCatch(error, info) {
-        // Display fallback UI
-        this.setState({ hasError: true });
-        console.log("catched")
-        // You can also log the error to an error reporting service;
     }
 
     componentWillMount(){
-        this.loading = true;
-
-        client({
-            method: 'GET',
-            path: "/auth/v1/me",
-            headers: {'Content-Type': 'application/json', 'X-Requested-With' : ''},
-        }).then(result=>{
-                this.loading = false;
-                this.setState({user:result.entity});
-        });
+        this.props.request();
     }
-
-    componentDidCatch(error, info) {
-        // Display fallback UI
-        this.setState({ hasError: true });
-        // You can also log the error to an error reporting service
-    }
-
-
-
 
     render() {
-        let content;
-        if(this.loading === true){
+        if(this.props.fetching === false){
             return  <Spin loading={this.loading}/>
         }
         else {
-            let isAnonim = this.state.user.role.findIndex(x => x.name === "ANONIM");
-            let isModer = this.state.user.role.findIndex(x => x.name === "MODER");
-            let isUser = this.state.user.role.findIndex(x => x.name === "USER");
+            let isAnonim = this.props.user.role.findIndex(x => x.name === "ANONIM");
+            let isModer = this.props.user.role.findIndex(x => x.name === "MODER");
+            let isUser = this.props.user.role.findIndex(x => x.name === "USER");
 
             if(isAnonim !== -1 && this.props.location.pathname !== "/login")
                 this.props.history.push("/login");
@@ -67,12 +40,12 @@ class RoleFilter extends React.Component{
                 null;
             let app = isModer !== -1 ?
                 <Route path="/list">
-                    <App history={this.props.history} role={this.state.role}/>
+                    <App history={this.props.history} role={this.props.user}/>
                 </Route> :
                 null;
             let main = isUser !== -1 ?
                 <Route exact path="/">
-                    <MainPage user={this.state.user}/>
+                    <MainPage user={this.props.user}/>
                 </Route> :
                 null;
             return <div>
@@ -98,4 +71,15 @@ class RoleFilter extends React.Component{
 
 }
 
-export default withRouter(RoleFilter)
+
+function mapStateToProps(state) {
+   // console.log(state);
+    return {
+        //пользователь
+        user: state.role.user,
+        fetching: state.role.fetching
+    };
+}
+
+//связываем действия и состояние с видом
+export default withRouter(connect(mapStateToProps, actions)(RoleFilter));
