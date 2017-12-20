@@ -34,11 +34,11 @@ const history = syncHistoryWithStore(createBrowserHistory(), store);
 
 ReactDOM.render(
     <Provider store={store}>
-        <BrowserRouter>
-            <LocaleProvider locale={ruRU}>
-                <RoleFilter history={history}/>
-            </LocaleProvider>
-        </BrowserRouter>
+            <BrowserRouter>
+                <LocaleProvider locale={ruRU}>
+                    <RoleFilter history={history}/>
+                </LocaleProvider>
+            </BrowserRouter>
     </Provider>
     ,
     document.getElementById("root"));

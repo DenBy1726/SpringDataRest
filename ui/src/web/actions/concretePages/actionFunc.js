@@ -26,7 +26,7 @@ export function load(attributes,page,sorter){
         return loadData(params)
             .done(collections=>{
                 dispatch(actions.pageLoaded(collections, attributes, params))
-            });
+            })
     } 
 }
 

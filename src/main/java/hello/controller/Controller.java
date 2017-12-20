@@ -98,7 +98,10 @@ public class Controller {
     }
 
 
-
+    @RequestMapping(value="/invalidSession",method = RequestMethod.GET)
+    @ResponseBody
+    public void invalidSession(HttpSession session){
+    }
 
 
 }

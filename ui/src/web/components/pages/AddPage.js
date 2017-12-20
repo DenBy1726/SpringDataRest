@@ -43,7 +43,7 @@ class AddForm extends React.Component{
                 register_on: new Date().toISOString().split('T')[0]
             };
             this.props.OK(values);
-            this.props.history.goBack();
+            this.props.history.push("/list");
         });
     }
 

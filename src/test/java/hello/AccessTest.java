@@ -33,8 +33,8 @@ public class AccessTest {
 
 
     @Test
-    public void accessToConcreteShouldRedirectForAnonim() throws Exception {
-        mockMvc.perform(get("/api/v1/concretePages")).andDo(print()).andExpect(status().is(302));
+    public void accessToConcreteShouldNonAuthorizenAnonim() throws Exception {
+        mockMvc.perform(get("/api/v1/concretePages")).andDo(print()).andExpect(status().is(401));
     }
 
     @Test
@@ -56,8 +56,8 @@ public class AccessTest {
     }
 
     @Test
-    public void accessToUsersShouldRedirectForAnonim() throws Exception {
-        mockMvc.perform(get("/api/v1/users")).andDo(print()).andExpect(status().is(302));
+    public void accessToUsersShouldNonAuthorizenForAnonim() throws Exception {
+        mockMvc.perform(get("/api/v1/users")).andDo(print()).andExpect(status().is(401));
     }
 
     @Test
@@ -79,8 +79,8 @@ public class AccessTest {
     }
 
     @Test
-    public void accessToCredentialShouldRedirectForAnonim() throws Exception {
-        mockMvc.perform(get("/api/v1/credentials")).andDo(print()).andExpect(status().is(302));
+    public void accessToCredentialShouldNonAuthorizenAnonim() throws Exception {
+        mockMvc.perform(get("/api/v1/credentials")).andDo(print()).andExpect(status().is(401));
     }
 
     @Test

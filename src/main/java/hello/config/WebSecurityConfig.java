@@ -1,6 +1,8 @@
 package hello.config;
 
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,14 +15,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
         import org.springframework.security.config.annotation.web.builders.HttpSecurity;
         import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
         import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-        import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
         import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.session.InvalidSessionStrategy;
 
 import javax.sql.DataSource;
+
+import static java.awt.SystemColor.control;
 
 @Configuration
 @EnableWebSecurity
@@ -32,10 +41,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    private RESTAuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private RESTAuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
+    private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
+
     @Bean(name="authenticationManager")
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
     }
 
     // регистрируем нашу реализацию UserDetailsService
@@ -49,15 +70,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        http.addFilterAfter(
+                new FilterToGetTimeOut(), BasicAuthenticationFilter.class);
         http
                 .authorizeRequests()
                 .antMatchers("/auth/v1/me/**").permitAll()
+                .antMatchers("/auth/v1/**").permitAll()
                 .antMatchers("/api/v1/concretePages/**").hasAnyAuthority("USER","MODER")
                 .antMatchers("/api/v1/users/**").hasAuthority("MODER")
                 .antMatchers("/api/v1/").hasAuthority("MODER")
                 .antMatchers("/api/v1/profile/**").hasAuthority("MODER")
                 .antMatchers("/api/v1/credentials/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
+
+        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+        http.formLogin().successHandler(authenticationSuccessHandler);
+        http.formLogin().failureHandler(authenticationFailureHandler);
 
         // включаем защиту от CSRF атак
         http.csrf()
@@ -70,7 +98,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 // указываем страницу с формой логина
-                .loginPage("/login")
+               // .loginPage()
                 // указываем action с формы логина
                 .loginProcessingUrl("/auth/v1/login")
                 // указываем URL при неудачном логине
@@ -89,16 +117,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/auth/v1/logout")
                 // указываем URL при удачном логауте
                 .logoutSuccessUrl("/login?logout")
-                // делаем не валидной текущую сессию
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
+                .deleteCookies("JSESSIONID")
+                .deleteCookies("remember-me-cookie");
 
         //remember me configuration
         http.rememberMe().
                 rememberMeParameter("remember-me-parameter").
                 rememberMeCookieName("remember-me-cookie").
-                tokenValiditySeconds(86400)
+                tokenValiditySeconds(30)
                 .tokenRepository(persistentTokenRepository());
+
     }
 
     @Bean
