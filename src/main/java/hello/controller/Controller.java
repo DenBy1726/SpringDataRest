@@ -38,7 +38,7 @@ public class Controller {
 
     @RequestMapping(value="/me",method = RequestMethod.GET)
     @ResponseBody
-    public Object getRoles(){
+    public Object getRoles(HttpServletRequest request){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal.getClass() != User.class) {
             if(principal.getClass() != String.class)

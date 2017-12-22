@@ -4,7 +4,7 @@ import Icon from "antd/es/icon/index";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import Button from "antd/es/button/button";
 import withRouter from "react-router-dom/es/withRouter";
-import client from "../../api/client"
+import request from "../../api/request"
 import Link from "react-router-dom/es/Link";
 const FormItem = Form.Item;
 class LoginForm extends React.Component{
@@ -19,7 +19,7 @@ class LoginForm extends React.Component{
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                client({
+                request({
                     method: 'POST',
                     path: "/auth/v1/login",
                     entity: values,

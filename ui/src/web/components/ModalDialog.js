@@ -1,125 +1,71 @@
+import { Button, Modal, Form, Input, Radio } from 'antd';
 import React from "react"
-import ReactDOM from "react-dom"
-import propTypes from "prop-types"
+import Icon from "antd/es/icon/index";
+import Checkbox from "antd/es/checkbox/Checkbox";
+import request from "../api/request";
+const FormItem = Form.Item;
 
-export default class ModalDialog extends React.Component{
+class ExpiredDialog extends React.Component{
     constructor(props){
         super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.state = {
-            visible: false,
-            cancel_title: this.props.cancel_title ? this.props.cancel_title : 'Нет',
-            action_title: this.props.action_title ? this.props.action_title : 'Да',
-            title: '',
-            text: ''
-        };
-        this.close = this.close.bind(this);
-        this.action = this.action.bind(this);
-        this.open = this.open.bind(this);
+
+        this.submit = this.submit.bind(this);
     }
 
-    // Обработчик закрытия модального окна, вызовет обработчик отказа
-    close(){
-        this.setState({
-            visible: false
-        }, function () {
-            return this.promise.reject();
-        });
-    }
-    // Обработчик действия модального окна, вызовет обработчик действия
-    action(e) {
-        let page;
-        if(this.props.attributes !== undefined) {
-            page = this.handleSubmit(e);
-            if (page === undefined)
-                return;
-        }
-        this.setState({
-            visible: false
-        }, function () {
-            return this.promise.resolve(page);
-        });
-    }
-    // Обработчик открытия модального окна. Возвращает promise
-    // ( при желании, можно передавать также названия кнопок )
-    open(text, title = '',data) {
-        this.setState({
-            visible: true,
-            title: title,
-            text: text
-        });
-
-        if(data !== undefined && this.props.attributes !== undefined){
-            this.props.attributes.forEach(attribute => {
-                let node = ReactDOM.findDOMNode(this.refs[attribute]);
-                node.value = data[attribute];
-            });
-        }
-        // promise необходимо обновлять при каждом новом запуске окна
-        this.promise = new $.Deferred();
-        return this.promise;
-    }
-
-    handleSubmit(e) {
+    submit(e){
         e.preventDefault();
-        let newPage = {};
-        let wasError = false;
-        this.props.attributes.forEach(attribute => {
-            let node = ReactDOM.findDOMNode(this.refs[attribute]);
-            let value = node.value.trim();
-            if(value === "") {
-                node.className += " validationError";
-                wasError = true;
-                return;
-            }
-            else
-                node.className = "field";
-            newPage[attribute] = ReactDOM.findDOMNode(this.refs[attribute]).value.trim();
-        });
-        if(wasError)
-            return;
-
-        // очистить все поля
-        this.props.attributes.forEach(attribute => {
-
-            ReactDOM.findDOMNode(this.refs[attribute]).className = "field";
-        });
-
-        return newPage;
-
+        this.props.history.goBack();
     }
+        handleSubmit(e){
+            let that = this;
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    fetch("/auth/v1/login", {
+                        method: 'POST',
+                        body: "username=" + values.username + "&" + "password=" + values.password,
+                        credentials: 'include',
+                        headers: {"Content-Type": "application/x-www-form-urlencoded"}
+                    }).then(response => {
+                        that.setState({visible: false});
+                        that.props.onCancel();
+                    });
+                }});
+        }
 
     render(){
-
-        let modalClass = this.state.visible ? "applyDialog" : "";
-        let modalStyles = this.state.visible ? {display: "block"} : {display: "none"};
-        let inputs;
-        if(this.props.attributes !== undefined) {
-            inputs = this.props.attributes.map(x =>
-                <p key={x}>
-                    <input type="text" placeholder={x} ref={x} className="field"/>
-                </p>
-            );
-        }
-
-        return <div className={modalClass} style={modalStyles}>
-            <div>
-                <p>{this.state.text}</p>
-                {inputs}
-                <div>
-                    <button type="button" className="submitDialogButton"
-                            onClick={this.action}>{this.state.action_title}</button>
-                    <button type="button" className="submitDialogButton"
-                            onClick={this.close}>{this.state.cancel_title}</button>
-                </div>
-            </div>
-        </div>
+        const { visible, onCreate, form,history } = this.props;
+        const { getFieldDecorator } = form;
+        return (
+            <Modal
+                visible={visible}
+                title="Ваша сессия закончилась"
+                okText="Продлить"
+                cancelText="Выйти"
+                onCancel={()=>history.go("/login")}
+                onOk={(e)=>this.handleSubmit(e)}
+            >
+                <Form layout="vertical">
+                        <FormItem label="Логин:">
+                            {getFieldDecorator('username')(
+                            < Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}} />}
+                                placeholder="Login" type='text' name='username' />
+                                )}
+                        </FormItem>
+                        <FormItem label="Пароль:">
+                            {getFieldDecorator('password')(
+                            < Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}} />}
+                                placeholder="Password" type='password' name='password' />
+                            )}
+                        </FormItem>
+                        <FormItem>
+                                <Checkbox name={"remember-me-parameter"}>Запомнить меня</Checkbox>
+                        </FormItem>
+                </Form>
+            </Modal>
+        );
     }
 }
 
-ModalDialog.propTypes ={
-    title : propTypes.string.isRequired,
-    onCreate : propTypes.func.isRequired,
-    data : propTypes.object.isRequired
-};
+const ModalDialog = Form.create()(ExpiredDialog);
+export default ModalDialog;
 

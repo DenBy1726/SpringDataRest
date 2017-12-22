@@ -8,7 +8,7 @@ const root = "/api/v1/";
 export function loadWithSchema(page,sorter) {
     return function (dispatch) {
         return loadSchema()
-            .done(schema=>{
+            .then(schema=>{
                 if(schema !== undefined)
                     dispatch(load(Object.keys(schema.entity.properties).filter(x => x !== 'id' && x !=='register_on'),page,sorter));
             })
@@ -25,7 +25,7 @@ export function load(attributes,page,sorter){
 
         dispatch(actions.pageLoading());
         return loadData(params)
-            .done(collections=>{
+            .then(collections=>{
                 if(collections !== undefined)
                     dispatch(actions.pageLoaded(collections, attributes, params))
             })
@@ -43,9 +43,14 @@ function loadSchema(){
 
 //загрузка данных
 function loadData(params) {
-    return follow(request, root, [
+    return request({
+    method: 'GET',
+    path: root + "users{?page,size,sort}",
+    params: params
+});
+   /* return follow(request, root, [
         {rel: 'users', params: params}]
-    );
+    );*/
 }
 
 
@@ -78,7 +83,7 @@ export function create(newPage,attributes,page,sorter){
             path: root + "users",
             entity: newPage,
             headers: {'Content-Type': 'application/json'}
-        }).done(response => {
+        }).then(response => {
             page.current = Math.ceil((page.total + 1)/page.pageSize);
             dispatch(load(attributes,page,sorter));
         });
@@ -107,8 +112,11 @@ export function update(page,updatedPage,attributes,pageParam,sorter) {
             headers: {
                 'Content-Type': 'application/json',
             }
-        }).done(response => {
-            dispatch(load(attributes,pageParam,sorter));
+        }).then(response => {
+            if(response) {
+                dispatch(load(attributes, pageParam, sorter));
+                this.props.history.push("/list");
+            }
         });
     }
 }

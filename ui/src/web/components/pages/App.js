@@ -22,6 +22,7 @@ class App extends React.Component{
     constructor(props) {
         super(props);
         this.attributes = [];
+        this.state = {expired: false};
         this.page = [];
         this.sorter = undefined;
         this.onNavigate = this.onNavigate.bind(this);
@@ -30,8 +31,13 @@ class App extends React.Component{
         this.onUpdate = this.onUpdate.bind(this);
         this.onCancel = this.onCancel.bind(this);
 
+        window.sessionExpired = this.sessionExpired.bind(this);
+
     }
 
+    sessionExpired(){
+        this.setState({expired: true});
+    }
 
     componentWillMount(){
         //грузим данные с сервера, устанавливаем размер страницы
@@ -83,6 +89,27 @@ class App extends React.Component{
 
     onCancel(){
         this.props.load(this.attributes,this.page,this.sorter);
+    }
+
+    saveFormRef(form){
+        this.form = form;
+    }
+
+    handleCreate(){
+        const form = this.form;
+        form.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+
+            console.log('Received values of form: ', values);
+            form.resetFields();
+            this.setState({ expired: false });
+        });
+    }
+
+    handleCancel(){
+        this.setState({ expired: false });
     }
 
 
@@ -140,7 +167,14 @@ class App extends React.Component{
             data[i].age = getAge(data[i].birthday);
         }
             return (
-
+                <div>
+                    <ModalDialog
+                        ref={(x)=>{this.saveFormRef(x)}}
+                        visible={this.state.expired}
+                        history={this.props.history}
+                        onCreate={()=>{this.handleCreate()}}
+                        onCancel={()=>{this.handleCancel()}}
+                    />
                         <Switch>
                             <Route exact path="/list/">
                                 <div>
@@ -162,6 +196,7 @@ class App extends React.Component{
                                 </div>
                             </Route>
                         </Switch>
+                </div>
             )
     }
 }

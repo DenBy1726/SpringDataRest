@@ -46,7 +46,6 @@ class EditForm extends React.Component{
                 id: this.editing.id
             };
             this.props.OK(this.editing,values);
-            this.props.history.goBack();
         });
     }
 

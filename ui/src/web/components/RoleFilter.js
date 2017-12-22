@@ -19,6 +19,7 @@ class RoleFilter extends React.Component{
 
     componentWillMount(){
         this.props.request();
+
     }
 
     render() {
@@ -30,7 +31,7 @@ class RoleFilter extends React.Component{
             let isModer = this.props.user.role.findIndex(x => x.name === "MODER");
             let isUser = this.props.user.role.findIndex(x => x.name === "USER");
 
-            if(isAnonim !== -1 && this.props.location.pathname !== "/login")
+            if(isAnonim !== -1 && ( this.props.location.pathname !== "/login" && this.props.location.pathname !== "/registration"))
                 this.props.history.push("/login");
 
             let appMenu = isModer !== -1 ?
