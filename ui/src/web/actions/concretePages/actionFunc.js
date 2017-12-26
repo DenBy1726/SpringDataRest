@@ -115,7 +115,7 @@ export function update(page,updatedPage,attributes,pageParam,sorter) {
         }).then(response => {
             if(response) {
                 dispatch(load(attributes, pageParam, sorter));
-                this.props.history.push("/list");
+                window.reduxHistory.push("/list");
             }
         });
     }

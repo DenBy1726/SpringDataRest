@@ -15,6 +15,7 @@ import {createBrowserHistory} from 'history';
 class RoleFilter extends React.Component{
     constructor(props){
         super(props);
+        window.reduxHistory = this.props.history;
     }
 
     componentWillMount(){
